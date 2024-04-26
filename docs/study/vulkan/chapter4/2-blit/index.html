@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-CN" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="要在原始图像的基础上生成 Mipmap，可以通过使用多个图像传输操作来实现。在每个 Mipmap 级别，图像的尺寸会减小一半，并且可以根据需要使用不同的过滤器来处理像素数据。
+以下是一个基于原始图像生成 Mipmap 的简单示例：
+// 1. 创建源和目标图像的视图 // 创建源图像视图 VkImageViewCreateInfo srcImageViewInfo = {}; srcImageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO; srcImageViewInfo.image = srcImage; // srcImage 是原始图像 srcImageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D; srcImageViewInfo.format = srcFormat; // srcFormat 是原始图像格式 srcImageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT; srcImageViewInfo.subresourceRange.baseMipLevel = 0; srcImageViewInfo.subresourceRange.levelCount = 1; srcImageViewInfo.subresourceRange.baseArrayLayer = 0; srcImageViewInfo.subresourceRange.layerCount = 1; VkImageView srcImageView; vkCreateImageView(device, &amp;srcImageViewInfo, nullptr, &amp;srcImageView); // 创建目标图像视图 VkImageViewCreateInfo dstImageViewInfo = {}; dstImageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO; dstImageViewInfo.image = srcImage; // 目标图像和原始图像使用同一个图像对象 dstImageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D; dstImageViewInfo.">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#343a40">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/study/vulkan/chapter4/2-blit/">
+  <meta property="og:site_name" content="YCK-DZ">
+  <meta property="og:title" content="vkCmdBlitImage">
+  <meta property="og:description" content="要在原始图像的基础上生成 Mipmap，可以通过使用多个图像传输操作来实现。在每个 Mipmap 级别，图像的尺寸会减小一半，并且可以根据需要使用不同的过滤器来处理像素数据。
+以下是一个基于原始图像生成 Mipmap 的简单示例：
+// 1. 创建源和目标图像的视图 // 创建源图像视图 VkImageViewCreateInfo srcImageViewInfo = {}; srcImageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO; srcImageViewInfo.image = srcImage; // srcImage 是原始图像 srcImageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D; srcImageViewInfo.format = srcFormat; // srcFormat 是原始图像格式 srcImageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT; srcImageViewInfo.subresourceRange.baseMipLevel = 0; srcImageViewInfo.subresourceRange.levelCount = 1; srcImageViewInfo.subresourceRange.baseArrayLayer = 0; srcImageViewInfo.subresourceRange.layerCount = 1; VkImageView srcImageView; vkCreateImageView(device, &amp;amp;srcImageViewInfo, nullptr, &amp;amp;srcImageView); // 创建目标图像视图 VkImageViewCreateInfo dstImageViewInfo = {}; dstImageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO; dstImageViewInfo.image = srcImage; // 目标图像和原始图像使用同一个图像对象 dstImageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D; dstImageViewInfo.">
+  <meta property="og:locale" content="zh-CN">
+  <meta property="og:type" content="article">
+  <meta property="article:section" content="docs">
+<title>vkCmdBlitImage | YCK-DZ</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/f2.ico" >
+<link rel="canonical" href="http://localhost:1313/docs/study/vulkan/chapter4/2-blit/">
+<link rel="stylesheet" href="/book.min.309b7ed028807cdb68d8d61e26d609f48369c098dbf5e4d8c0dcf4cdf49feafc.css" integrity="sha256-MJt&#43;0CiAfNto2NYeJtYJ9INpwJjb9eTYwNz0zfSf6vw=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.653976fc1c9c74ea3ee0e9dd83cef298301f466db85eac3b0e3aa5537148da2e.js" integrity="sha256-ZTl2/BycdOo&#43;4Ondg87ymDAfRm24Xqw7DjqlU3FI2i4=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+
+  
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/f2.png" alt="Logo" /><span>YCK-DZ</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li class="book-section-flat" >
+          
+  
+  
+
+  
+    <a href="/docs/study/" class="">vulkan学习</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-1aa90340d032c5d9f8cf998deec6ef6c" class="toggle"  />
+    <label for="section-1aa90340d032c5d9f8cf998deec6ef6c" class="flex justify-between">
+      <a href="/docs/study/vulkan/chapter1/" class="">chapter1 基本概念</a>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/study/vulkan/chapter1/first/" class="">Instance</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/study/vulkan/chapter1/device/" class="">设备</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-0ab855d195155d0c45c4428e53694186" class="toggle"  />
+    <label for="section-0ab855d195155d0c45c4428e53694186" class="flex justify-between">
+      <a href="/docs/study/vulkan/chapter2/" class="">chapter2 三角形出来</a>
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-2bc6ff8da192bb919c40105dba69871c" class="toggle"  />
+    <label for="section-2bc6ff8da192bb919c40105dba69871c" class="flex justify-between">
+      <a href="/docs/study/vulkan/chapter3/" class="">chapter3 纹理</a>
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-940dccf530a93c91d0814820bf6df4d0" class="toggle" checked />
+    <label for="section-940dccf530a93c91d0814820bf6df4d0" class="flex justify-between">
+      <a href="/docs/study/vulkan/chapter4/" class="">chapter4 同步</a>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/study/vulkan/chapter4/1-pipeline/" class="">pipeline</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/study/vulkan/chapter4/2-blit/" class="active">vkCmdBlitImage</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li class="book-section-flat" >
+          
+  
+  
+
+  
+    <span>Shortcodes</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/buttons/" class="">Buttons</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/columns/" class="">Columns</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/details/" class="">Details</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/expand/" class="">Expand</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/hints/" class="">Hints</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-d4c83c0dd655503a3da63d0c6550ed41" class="toggle"  />
+    <label for="section-d4c83c0dd655503a3da63d0c6550ed41" class="flex justify-between">
+      <a href="/docs/shortcodes/section/" class="">Section</a>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/section/page1/" class="">Page1</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/section/page2/" class="">Page2</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/tabs/" class="">Tabs</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/posts/math/"  >
+        Math
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>vkCmdBlitImage</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents"></nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><p>要在原始图像的基础上生成 Mipmap，可以通过使用多个图像传输操作来实现。在每个 Mipmap 级别，图像的尺寸会减小一半，并且可以根据需要使用不同的过滤器来处理像素数据。</p>
+<p>以下是一个基于原始图像生成 Mipmap 的简单示例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">// 1. 创建源和目标图像的视图
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 创建源图像视图
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>VkImageViewCreateInfo srcImageViewInfo <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span>srcImageViewInfo.sType <span style="color:#f92672">=</span> VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+</span></span><span style="display:flex;"><span>srcImageViewInfo.image <span style="color:#f92672">=</span> srcImage; <span style="color:#75715e">// srcImage 是原始图像
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>srcImageViewInfo.viewType <span style="color:#f92672">=</span> VK_IMAGE_VIEW_TYPE_2D;
+</span></span><span style="display:flex;"><span>srcImageViewInfo.format <span style="color:#f92672">=</span> srcFormat; <span style="color:#75715e">// srcFormat 是原始图像格式
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>srcImageViewInfo.subresourceRange.aspectMask <span style="color:#f92672">=</span> VK_IMAGE_ASPECT_COLOR_BIT;
+</span></span><span style="display:flex;"><span>srcImageViewInfo.subresourceRange.baseMipLevel <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>srcImageViewInfo.subresourceRange.levelCount <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>srcImageViewInfo.subresourceRange.baseArrayLayer <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>srcImageViewInfo.subresourceRange.layerCount <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>VkImageView srcImageView;
+</span></span><span style="display:flex;"><span>vkCreateImageView(device, <span style="color:#f92672">&amp;</span>srcImageViewInfo, <span style="color:#66d9ef">nullptr</span>, <span style="color:#f92672">&amp;</span>srcImageView);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 创建目标图像视图
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>VkImageViewCreateInfo dstImageViewInfo <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span>dstImageViewInfo.sType <span style="color:#f92672">=</span> VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+</span></span><span style="display:flex;"><span>dstImageViewInfo.image <span style="color:#f92672">=</span> srcImage; <span style="color:#75715e">// 目标图像和原始图像使用同一个图像对象
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>dstImageViewInfo.viewType <span style="color:#f92672">=</span> VK_IMAGE_VIEW_TYPE_2D;
+</span></span><span style="display:flex;"><span>dstImageViewInfo.format <span style="color:#f92672">=</span> srcFormat; <span style="color:#75715e">// 目标图像和原始图像使用相同的格式
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>dstImageViewInfo.subresourceRange.aspectMask <span style="color:#f92672">=</span> VK_IMAGE_ASPECT_COLOR_BIT;
+</span></span><span style="display:flex;"><span>dstImageViewInfo.subresourceRange.baseMipLevel <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; <span style="color:#75715e">// 从第二级 Mipmap 开始
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>dstImageViewInfo.subresourceRange.levelCount <span style="color:#f92672">=</span> mipLevels <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>; <span style="color:#75715e">// 总共 mipLevels - 1 个 Mipmap 级别
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>dstImageViewInfo.subresourceRange.baseArrayLayer <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>dstImageViewInfo.subresourceRange.layerCount <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>VkImageView dstImageView;
+</span></span><span style="display:flex;"><span>vkCreateImageView(device, <span style="color:#f92672">&amp;</span>dstImageViewInfo, <span style="color:#66d9ef">nullptr</span>, <span style="color:#f92672">&amp;</span>dstImageView);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 2. 生成 Mipmap
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>VkCommandBuffer commandBuffer; <span style="color:#75715e">// 假设已创建好的命令缓冲区
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 开始录制命令缓冲区
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>VkCommandBufferBeginInfo beginInfo <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span>beginInfo.sType <span style="color:#f92672">=</span> VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+</span></span><span style="display:flex;"><span>vkBeginCommandBuffer(commandBuffer, <span style="color:#f92672">&amp;</span>beginInfo);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 获取原始图像的尺寸
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int32_t</span> width <span style="color:#f92672">=</span> originalWidth;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int32_t</span> height <span style="color:#f92672">=</span> originalHeight;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">uint32_t</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span> mipLevels; <span style="color:#f92672">++</span>i) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 计算当前 Mipmap 级别的尺寸
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    width <span style="color:#f92672">=</span> std<span style="color:#f92672">::</span>max(<span style="color:#ae81ff">1</span>, width <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>);
+</span></span><span style="display:flex;"><span>    height <span style="color:#f92672">=</span> std<span style="color:#f92672">::</span>max(<span style="color:#ae81ff">1</span>, height <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 设置 Mipmap 层级
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    VkImageBlit blitRegion <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span>    blitRegion.srcSubresource.aspectMask <span style="color:#f92672">=</span> VK_IMAGE_ASPECT_COLOR_BIT;
+</span></span><span style="display:flex;"><span>    blitRegion.srcSubresource.baseArrayLayer <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    blitRegion.srcSubresource.mipLevel <span style="color:#f92672">=</span> i <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    blitRegion.srcOffsets[<span style="color:#ae81ff">1</span>].x <span style="color:#f92672">=</span> width;
+</span></span><span style="display:flex;"><span>    blitRegion.srcOffsets[<span style="color:#ae81ff">1</span>].y <span style="color:#f92672">=</span> height;
+</span></span><span style="display:flex;"><span>    blitRegion.srcOffsets[<span style="color:#ae81ff">1</span>].z <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    blitRegion.dstSubresource.aspectMask <span style="color:#f92672">=</span> VK_IMAGE_ASPECT_COLOR_BIT;
+</span></span><span style="display:flex;"><span>    blitRegion.dstSubresource.baseArrayLayer <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    blitRegion.dstSubresource.mipLevel <span style="color:#f92672">=</span> i;
+</span></span><span style="display:flex;"><span>    blitRegion.dstOffsets[<span style="color:#ae81ff">1</span>].x <span style="color:#f92672">=</span> std<span style="color:#f92672">::</span>max(<span style="color:#ae81ff">1</span>, width <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>);
+</span></span><span style="display:flex;"><span>    blitRegion.dstOffsets[<span style="color:#ae81ff">1</span>].y <span style="color:#f92672">=</span> std<span style="color:#f92672">::</span>max(<span style="color:#ae81ff">1</span>, height <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>);
+</span></span><span style="display:flex;"><span>    blitRegion.dstOffsets[<span style="color:#ae81ff">1</span>].z <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 执行图像传输操作
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    vkCmdBlitImage(commandBuffer, srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, srcImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, <span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>blitRegion, VK_FILTER_LINEAR);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 设置图像布局，以便下一次传输
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    VkImageMemoryBarrier barrier <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span>    barrier.sType <span style="color:#f92672">=</span> VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+</span></span><span style="display:flex;"><span>    barrier.srcAccessMask <span style="color:#f92672">=</span> VK_ACCESS_TRANSFER_WRITE_BIT;
+</span></span><span style="display:flex;"><span>    barrier.dstAccessMask <span style="color:#f92672">=</span> VK_ACCESS_TRANSFER_READ_BIT;
+</span></span><span style="display:flex;"><span>    barrier.oldLayout <span style="color:#f92672">=</span> VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+</span></span><span style="display:flex;"><span>    barrier.newLayout <span style="color:#f92672">=</span> VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+</span></span><span style="display:flex;"><span>    barrier.srcQueueFamilyIndex <span style="color:#f92672">=</span> VK_QUEUE_FAMILY_IGNORED;
+</span></span><span style="display:flex;"><span>    barrier.dstQueueFamilyIndex <span style="color:#f92672">=</span> VK_QUEUE_FAMILY_IGNORED;
+</span></span><span style="display:flex;"><span>    barrier.image <span style="color:#f92672">=</span> srcImage;
+</span></span><span style="display:flex;"><span>    barrier.subresourceRange.aspectMask <span style="color:#f92672">=</span> VK_IMAGE_ASPECT_COLOR_BIT;
+</span></span><span style="display:flex;"><span>    barrier.subresourceRange.baseMipLevel <span style="color:#f92672">=</span> i;
+</span></span><span style="display:flex;"><span>    barrier.subresourceRange.levelCount <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    barrier.subresourceRange.baseArrayLayer <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    barrier.subresourceRange.layerCount <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    vkCmdPipelineBarrier(commandBuffer,
+</span></span><span style="display:flex;"><span>        VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">nullptr</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">nullptr</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>barrier);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 结束录制命令缓冲区
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>vkEndCommandBuffer(commandBuffer);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 提交命令缓冲区
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>VkSubmitInfo submitInfo <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span>submitInfo.sType <span style="color:#f92672">=</span> VK_STRUCTURE_TYPE_SUBMIT_INFO;
+</span></span><span style="display:flex;"><span>submitInfo.commandBufferCount <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>submitInfo.pCommandBuffers <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>commandBuffer;
+</span></span><span style="display:flex;"><span>vkQueueSubmit(queue, <span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>submitInfo, VK_NULL_HANDLE);
+</span></span><span style="display:flex;"><span>vkQueueWaitIdle(queue); <span style="color:#75715e">// 等待队列执行完毕
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 清理资源
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>vkDestroyImageView(device, srcImageView, <span style="color:#66d9ef">nullptr</span>);
+</span></span><span style="display:flex;"><span>vkDestroyImageView(device, dstImageView, <span style="color:#66d9ef">nullptr</span>);
+</span></span></code></pre></div><p>这段代码首先创建了源图像和目标图像的视图。然后，在循环中对每个 Mipmap 级别执行图像传输操作，将源图像的内容传输到相应的目标图像中。在每次传输后，通过内存屏障设置图像布局，以便下一次传输操作。最后，提交命令缓冲区并清理资源。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>VkCommandBuffer commandBuffer; <span style="color:#75715e">// 假设已创建好的命令缓冲区
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 开始录制命令缓冲区
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>VkCommandBufferBeginInfo beginInfo <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span>beginInfo.sType <span style="color:#f92672">=</span> VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">vkBeginCommandBuffer</span>(commandBuffer, <span style="color:#f92672">&amp;</span>beginInfo);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 设置源和目标区域
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>VkImageBlit blitRegion <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span>blitRegion.srcSubresource.aspectMask <span style="color:#f92672">=</span> VK_IMAGE_ASPECT_COLOR_BIT;
+</span></span><span style="display:flex;"><span>blitRegion.srcSubresource.mipLevel <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>blitRegion.srcSubresource.baseArrayLayer <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>blitRegion.srcSubresource.layerCount <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>blitRegion.srcOffsets[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>}; <span style="color:#75715e">// 源图像起始坐标
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>blitRegion.srcOffsets[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">1</span>}; <span style="color:#75715e">// 源图像结束坐标
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>blitRegion.dstSubresource.aspectMask <span style="color:#f92672">=</span> VK_IMAGE_ASPECT_COLOR_BIT;
+</span></span><span style="display:flex;"><span>blitRegion.dstSubresource.mipLevel <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>blitRegion.dstSubresource.baseArrayLayer <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>blitRegion.dstSubresource.layerCount <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>blitRegion.dstOffsets[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>}; <span style="color:#75715e">// 目标图像起始坐标
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>blitRegion.dstOffsets[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">1</span>}; <span style="color:#75715e">// 目标图像结束坐标
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 执行图像传输操作
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">vkCmdBlitImage</span>(commandBuffer, srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, <span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>blitRegion, VK_FILTER_LINEAR);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 结束录制命令缓冲区
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">vkEndCommandBuffer</span>(commandBuffer);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 提交命令缓冲区
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>VkSubmitInfo submitInfo <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span>submitInfo.sType <span style="color:#f92672">=</span> VK_STRUCTURE_TYPE_SUBMIT_INFO;
+</span></span><span style="display:flex;"><span>submitInfo.commandBufferCount <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>submitInfo.pCommandBuffers <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>commandBuffer;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">vkQueueSubmit</span>(queue, <span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>submitInfo, VK_NULL_HANDLE);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">vkQueueWaitIdle</span>(queue); <span style="color:#75715e">// 等待队列执行完毕
+</span></span></span></code></pre></div><p>如果你想在同一场景中同时使用高分辨率和低分辨率的图像，你可以在渲染过程中针对不同的图像视图使用不同的分辨率。</p>
+<p>以下是一个示例代码，演示了如何在同一场景中同时使用高分辨率和低分辨率的图像：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>VkCommandBuffer commandBuffer; <span style="color:#75715e">// 假设已创建好的命令缓冲区
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 开始录制命令缓冲区
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>VkCommandBufferBeginInfo beginInfo <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span>beginInfo.sType <span style="color:#f92672">=</span> VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+</span></span><span style="display:flex;"><span>vkBeginCommandBuffer(commandBuffer, <span style="color:#f92672">&amp;</span>beginInfo);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 设置高分辨率图像的源和目标区域
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>VkImageBlit highResBlitRegion <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span>highResBlitRegion.srcSubresource.aspectMask <span style="color:#f92672">=</span> VK_IMAGE_ASPECT_COLOR_BIT;
+</span></span><span style="display:flex;"><span>highResBlitRegion.srcSubresource.mipLevel <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>highResBlitRegion.srcSubresource.baseArrayLayer <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>highResBlitRegion.srcSubresource.layerCount <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>highResBlitRegion.srcOffsets[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>}; <span style="color:#75715e">// 高分辨率图像起始坐标
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>highResBlitRegion.srcOffsets[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">1</span>}; <span style="color:#75715e">// 高分辨率图像结束坐标
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>highResBlitRegion.dstSubresource.aspectMask <span style="color:#f92672">=</span> VK_IMAGE_ASPECT_COLOR_BIT;
+</span></span><span style="display:flex;"><span>highResBlitRegion.dstSubresource.mipLevel <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>highResBlitRegion.dstSubresource.baseArrayLayer <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>highResBlitRegion.dstSubresource.layerCount <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>highResBlitRegion.dstOffsets[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>}; <span style="color:#75715e">// 目标图像起始坐标（高分辨率）
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>highResBlitRegion.dstOffsets[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">1</span>}; <span style="color:#75715e">// 目标图像结束坐标（高分辨率）
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 设置低分辨率图像的源和目标区域
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>VkImageBlit lowResBlitRegion <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span>lowResBlitRegion.srcSubresource.aspectMask <span style="color:#f92672">=</span> VK_IMAGE_ASPECT_COLOR_BIT;
+</span></span><span style="display:flex;"><span>lowResBlitRegion.srcSubresource.mipLevel <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>lowResBlitRegion.srcSubresource.baseArrayLayer <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>lowResBlitRegion.srcSubresource.layerCount <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>lowResBlitRegion.srcOffsets[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>}; <span style="color:#75715e">// 低分辨率图像起始坐标
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>lowResBlitRegion.srcOffsets[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">1</span>}; <span style="color:#75715e">// 低分辨率图像结束坐标
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>lowResBlitRegion.dstSubresource.aspectMask <span style="color:#f92672">=</span> VK_IMAGE_ASPECT_COLOR_BIT;
+</span></span><span style="display:flex;"><span>lowResBlitRegion.dstSubresource.mipLevel <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>lowResBlitRegion.dstSubresource.baseArrayLayer <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>lowResBlitRegion.dstSubresource.layerCount <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>lowResBlitRegion.dstOffsets[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>}; <span style="color:#75715e">// 目标图像起始坐标（低分辨率）
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>lowResBlitRegion.dstOffsets[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">1</span>}; <span style="color:#75715e">// 目标图像结束坐标（低分辨率）
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 执行高分辨率图像传输操作
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>vkCmdBlitImage(commandBuffer, highResSrcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, highResDstImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, <span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>highResBlitRegion, VK_FILTER_LINEAR);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 执行低分辨率图像传输操作
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>vkCmdBlitImage(commandBuffer, lowResSrcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, lowResDstImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, <span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>lowResBlitRegion, VK_FILTER_LINEAR);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 结束录制命令缓冲区
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>vkEndCommandBuffer(commandBuffer);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 提交命令缓冲区
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>VkSubmitInfo submitInfo <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span>submitInfo.sType <span style="color:#f92672">=</span> VK_STRUCTURE_TYPE_SUBMIT_INFO;
+</span></span><span style="display:flex;"><span>submitInfo.commandBufferCount <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>submitInfo.pCommandBuffers <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>commandBuffer;
+</span></span><span style="display:flex;"><span>vkQueueSubmit(queue, <span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>submitInfo, VK_NULL_HANDLE);
+</span></span><span style="display:flex;"><span>vkQueueWaitIdle(queue); <span style="color:#75715e">// 等待队列执行完毕
+</span></span></span></code></pre></div><p>在这个示例中，我们有两个图像对：一个用于高分辨率图像，另一个用于低分辨率图像。我们分别设置了两个不同的源和目标区域，然后使用 <code>vkCmdBlitImage</code> 分别执行高分辨率和低分辨率图像的传输操作。这样，在渲染过程中，你可以同时使用这两个图像对，每个图像对代表了不同的分辨率。</p>
+<p><code>highResDstImage</code> 和 <code>lowResDstImage</code> 可以是同一个图像视图（imageView）。在 Vulkan 中，图像视图描述了对图像数据的一种访问方式，而图像对象则是实际存储图像数据的资源。因此，可以在同一个图像对象上创建多个不同的图像视图，以便在不同的场景中使用。</p>
+<p>在上面的示例中，如果 <code>highResDstImage</code> 和 <code>lowResDstImage</code> 是同一个图像对象的不同视图，那么你可以使用同一个图像对象来存储不同分辨率的图像数据。这样可以节省内存，并且在进行图像传输操作时，你可以在同一个图像对象上进行读写操作，而不需要额外的资源。</p>
+<p>当使用同一个图像对象时，你可以在创建图像视图时指定不同的 Mipmap 级别来表示不同分辨率的图像数据。以下是一个示例代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>VkImageViewCreateInfo imageViewInfo <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span>imageViewInfo.sType <span style="color:#f92672">=</span> VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+</span></span><span style="display:flex;"><span>imageViewInfo.image <span style="color:#f92672">=</span> dstImage; <span style="color:#75715e">// dstImage 是同一个图像对象
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>imageViewInfo.viewType <span style="color:#f92672">=</span> VK_IMAGE_VIEW_TYPE_2D;
+</span></span><span style="display:flex;"><span>imageViewInfo.format <span style="color:#f92672">=</span> VK_FORMAT_RGBA8_SRGB; <span style="color:#75715e">// 假设图像格式为 RGBA8 SRGB
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>imageViewInfo.subresourceRange.aspectMask <span style="color:#f92672">=</span> VK_IMAGE_ASPECT_COLOR_BIT;
+</span></span><span style="display:flex;"><span>imageViewInfo.subresourceRange.baseMipLevel <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>imageViewInfo.subresourceRange.levelCount <span style="color:#f92672">=</span> mipLevels; <span style="color:#75715e">// mipLevels 是总 Mipmap 级别数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>imageViewInfo.subresourceRange.baseArrayLayer <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>imageViewInfo.subresourceRange.layerCount <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>VkImageView imageView;
+</span></span><span style="display:flex;"><span>vkCreateImageView(device, <span style="color:#f92672">&amp;</span>imageViewInfo, <span style="color:#66d9ef">nullptr</span>, <span style="color:#f92672">&amp;</span>imageView);
+</span></span></code></pre></div><p>在上面的示例中，<code>dstImage</code> 是同一个图像对象，我们通过创建一个图像视图 <code>imageView</code> 来访问图像数据。在创建图像视图时，我们通过设置 <code>baseMipLevel</code> 和 <code>levelCount</code> 来指定视图使用的 Mipmap 级别范围。通过设置不同的 Mipmap 级别范围，可以在同一个图像对象上创建多个图像视图，每个视图表示不同分辨率的图像数据。</p>
+<p>假设 <code>mipLevels</code> 是总共的 Mipmap 级别数，那么可以通过调整 <code>baseMipLevel</code> 和 <code>levelCount</code> 来表示不同分辨率的图像数据。例如，如果要表示高分辨率图像数据，可以将 <code>baseMipLevel</code> 设置为 0，<code>levelCount</code> 设置为总 Mipmap 级别数；如果要表示低分辨率图像数据，可以将 <code>baseMipLevel</code> 设置为某个较小的值，<code>levelCount</code> 设置为相应的 Mipmap 级别数。</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+<script src="https://utteranc.es/client.js"
+        repo="yuncheolkim/hugoblogcomment"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script></div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents"></nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Introduction on YCK-DZ</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content in Introduction on YCK-DZ</description>
+    <generator>Hugo 0.125.0</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 18 Apr 2024 14:32:02 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Instance</title>
+      <link>http://localhost:1313/docs/study/vulkan/chapter1/first/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/study/vulkan/chapter1/first/</guid>
+      <description>&#xD;基本流程&#xD;#&#xD;public class test{ } </description>
+    </item>
+    <item>
+      <title>设备</title>
+      <link>http://localhost:1313/docs/study/vulkan/chapter1/device/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/study/vulkan/chapter1/device/</guid>
+      <description>&#xD;基本流程&#xD;#&#xD;public class test{ } </description>
+    </item>
+    <item>
+      <title>pipeline</title>
+      <link>http://localhost:1313/docs/study/vulkan/chapter4/1-pipeline/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/study/vulkan/chapter4/1-pipeline/</guid>
+      <description>Pipeline overview&#xD;#&#xD;stage&#xD;#&#xD;TOP_OF_PIPE_BIT&#xA;DRAW_INDIRECT_BIT&#xA;VERTEX_INPUT_BIT&#xA;VERTEX_SHADER_BIT&#xA;TESSELLATION_CONTROL_SHADER_BIT&#xA;TESSELLATION_EVALUATION_SHADER_BIT&#xA;GEOMETRY_SHADER_BIT&#xA;FRAGMENT_SHADER_BIT&#xA;EARLY_FRAGMENT_TESTS_BIT&#xA;LATE_FRAGMENT_TESTS_BIT&#xA;COLOR_ATTACHMENT_OUTPUT_BIT&#xA;TRANSFER_BIT&#xA;COMPUTE_SHADER_BIT&#xA;BOTTOM_OF_PIPE_BIT&#xA;HOST_BIT&#xA;ALL_GRAPHICS_BIT&#xA;ALL_COMMANDS_BIT&#xA;source&#xD;#&#xD;生产阶段&#xA;target&#xD;#&#xD;消费阶段&#xA;source 之后 target 之前&#xA;vkCmdPipelineBarrier( commandBuffer, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, // source stage VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, // destination stage /* remaining parameters omitted */); 这种转换表示，GPU 上当前正在进行的所有命令都需要完成，然后才执行该转换，并且在它完成转换之前，不允许任何命令开始。这个障碍会等待一切完成，并阻止任何工作在它开始之前启动。&#xA;vkCmdPipelineBarrier( commandBuffer, VK_PIPELINE_VERTEX_SHADER_BIT, // source stage VK_PIPELINE_COMPUTE_SHADER_BIT, // destination stage /* remaining parameters omitted */); If you write to a render target and read from it in a fragment shader, the stages would be VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT as the source and VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT as the destination – typical for G-Buffer rendering.</description>
+    </item>
+    <item>
+      <title>vkCmdBlitImage</title>
+      <link>http://localhost:1313/docs/study/vulkan/chapter4/2-blit/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/study/vulkan/chapter4/2-blit/</guid>
+      <description>要在原始图像的基础上生成 Mipmap，可以通过使用多个图像传输操作来实现。在每个 Mipmap 级别，图像的尺寸会减小一半，并且可以根据需要使用不同的过滤器来处理像素数据。&#xA;以下是一个基于原始图像生成 Mipmap 的简单示例：&#xA;// 1. 创建源和目标图像的视图 // 创建源图像视图 VkImageViewCreateInfo srcImageViewInfo = {}; srcImageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO; srcImageViewInfo.image = srcImage; // srcImage 是原始图像 srcImageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D; srcImageViewInfo.format = srcFormat; // srcFormat 是原始图像格式 srcImageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT; srcImageViewInfo.subresourceRange.baseMipLevel = 0; srcImageViewInfo.subresourceRange.levelCount = 1; srcImageViewInfo.subresourceRange.baseArrayLayer = 0; srcImageViewInfo.subresourceRange.layerCount = 1; VkImageView srcImageView; vkCreateImageView(device, &amp;amp;srcImageViewInfo, nullptr, &amp;amp;srcImageView); // 创建目标图像视图 VkImageViewCreateInfo dstImageViewInfo = {}; dstImageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO; dstImageViewInfo.image = srcImage; // 目标图像和原始图像使用同一个图像对象 dstImageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D; dstImageViewInfo.</description>
+    </item>
+    <item>
+      <title>图形学学习资源</title>
+      <link>http://localhost:1313/posts/hello/</link>
+      <pubDate>Thu, 18 Apr 2024 14:32:02 +0800</pubDate>
+      <guid>http://localhost:1313/posts/hello/</guid>
+      <description>https://gpuopen.com/learn/</description>
+    </item>
+    <item>
+      <title>math</title>
+      <link>http://localhost:1313/posts/math/math1/</link>
+      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/math/math1/</guid>
+      <description>Acerbo datus maxime&#xD;#&#xD;abc</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/docs/shortcodes/buttons/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/shortcodes/buttons/</guid>
+      <description>&#xD;Buttons&#xD;#&#xD;Buttons are styled links that can lead to local page or external link.&#xA;Example&#xD;#&#xD;{{&amp;lt; button relref=&amp;#34;/&amp;#34; [class=&amp;#34;...&amp;#34;] &amp;gt;}}Get Home{{&amp;lt; /button &amp;gt;}} {{&amp;lt; button href=&amp;#34;https://github.com/alex-shpak/hugo-book&amp;#34; &amp;gt;}}Contribute{{&amp;lt; /button &amp;gt;}} Get Home&#xD;Contribute&#xD;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/docs/shortcodes/columns/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/shortcodes/columns/</guid>
+      <description>Columns&#xD;#&#xD;Columns help organize shorter pieces of content horizontally for readability.&#xA;{{&amp;lt; columns &amp;gt;}} &amp;lt;!-- begin columns block --&amp;gt; # Left Content Lorem markdownum insigne... &amp;lt;---&amp;gt; &amp;lt;!-- magic separator, between columns --&amp;gt; # Mid Content Lorem markdownum insigne... &amp;lt;---&amp;gt; &amp;lt;!-- magic separator, between columns --&amp;gt; # Right Content Lorem markdownum insigne... {{&amp;lt; /columns &amp;gt;}} Example&#xD;#&#xD;Left Content&#xD;#&#xD;Lorem markdownum insigne. Olympo signis Delphis! Retexi Nereius nova develat stringit, frustra Saturnius uteroque inter!</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/docs/shortcodes/details/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/shortcodes/details/</guid>
+      <description>Details&#xD;#&#xD;Details shortcode is a helper for details html5 element. It is going to replace expand shortcode.&#xA;Example&#xD;#&#xD;{{&amp;lt; details &amp;#34;Title&amp;#34; [open] &amp;gt;}} ## Markdown content Lorem markdownum insigne... {{&amp;lt; /details &amp;gt;}} {{&amp;lt; details title=&amp;#34;Title&amp;#34; open=true &amp;gt;}} ## Markdown content Lorem markdownum insigne... {{&amp;lt; /details &amp;gt;}} Title&#xD;Markdown content&#xD;#&#xD;Lorem markdownum insigne&amp;hellip;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/docs/shortcodes/expand/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/shortcodes/expand/</guid>
+      <description>Expand&#xD;#&#xD;Expand shortcode can help to decrease clutter on screen by hiding part of text. Expand content by clicking on it.&#xA;Example&#xD;#&#xD;Default&#xD;#&#xD;{{&amp;lt; expand &amp;gt;}} ## Markdown content Lorem markdownum insigne... {{&amp;lt; /expand &amp;gt;}} Expand&#xD;↕&#xD;Markdown content&#xD;#&#xD;Lorem markdownum insigne&amp;hellip;&#xA;With Custom Label&#xD;#&#xD;{{&amp;lt; expand &amp;#34;Custom Label&amp;#34; &amp;#34;...&amp;#34; &amp;gt;}} ## Markdown content Lorem markdownum insigne... {{&amp;lt; /expand &amp;gt;}} Custom Label&#xD;...&#xD;Markdown content&#xD;#&#xD;Lorem markdownum insigne.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/docs/shortcodes/hints/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/shortcodes/hints/</guid>
+      <description>Hints&#xD;#&#xD;Hint shortcode can be used as hint/alerts/notification block.&#xA;There are 3 colors to choose: info, warning and danger.&#xA;{{&amp;lt; hint [info|warning|danger] &amp;gt;}} **Markdown content** Lorem markdownum insigne. Olympo signis Delphis! Retexi Nereius nova develat stringit, frustra Saturnius uteroque inter! Oculis non ritibus Telethusa {{&amp;lt; /hint &amp;gt;}} Example&#xD;#&#xD;Markdown content&#xA;Lorem markdownum insigne. Olympo signis Delphis! Retexi Nereius nova develat stringit, frustra Saturnius uteroque inter! Oculis non ritibus Telethusa&#xD;Markdown content</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/docs/shortcodes/section/page1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/shortcodes/section/page1/</guid>
+      <description>&#xD;Page 1&#xD;#&#xD;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/docs/shortcodes/section/page2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/shortcodes/section/page2/</guid>
+      <description>&#xD;Page 2&#xD;#&#xD;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/docs/shortcodes/tabs/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/shortcodes/tabs/</guid>
+      <description>Tabs&#xD;#&#xD;Tabs let you organize content by context, for example installation instructions for each supported platform.&#xA;{{&amp;lt; tabs &amp;#34;uniqueid&amp;#34; &amp;gt;}} {{&amp;lt; tab &amp;#34;MacOS&amp;#34; &amp;gt;}} # MacOS Content {{&amp;lt; /tab &amp;gt;}} {{&amp;lt; tab &amp;#34;Linux&amp;#34; &amp;gt;}} # Linux Content {{&amp;lt; /tab &amp;gt;}} {{&amp;lt; tab &amp;#34;Windows&amp;#34; &amp;gt;}} # Windows Content {{&amp;lt; /tab &amp;gt;}} {{&amp;lt; /tabs &amp;gt;}} Example&#xD;#&#xD;MacOS&#xD;MacOS&#xD;#&#xD;This is tab MacOS content.&#xA;Lorem markdownum insigne. Olympo signis Delphis!</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/docs/study/hidden/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/study/hidden/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>
