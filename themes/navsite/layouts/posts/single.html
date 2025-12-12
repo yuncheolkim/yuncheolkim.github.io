@@ -1,0 +1,26 @@
+{{ define "main" }}
+<article class="panel blog-post">
+  <header class="blog-post__header">
+    <h1 class="blog-post__title">{{ .Title }}</h1>
+    <div class="blog-post__meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+      {{ with .Params.tags }}
+        <span class="blog-post__tags">
+          {{ range . }}<a class="tag-badge" href="{{ (printf "/tags/%s/" (urlize .)) | relURL }}">{{ . }}</a>{{ end }}
+        </span>
+      {{ end }}
+    </div>
+    {{ with .Params.summary }}<p class="blog-post__subtitle">{{ . }}</p>{{ end }}
+  </header>
+
+  <div class="prose">
+    {{ .Content }}
+  </div>
+
+  <footer class="blog-post__footer">
+    <a class="ghost-link" href="{{ "/posts/" | relURL }}">← 返回博客</a>
+  </footer>
+</article>
+{{ end }}
+
+
