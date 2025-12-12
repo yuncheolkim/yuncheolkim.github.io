@@ -35,8 +35,8 @@
 
         if (kw.length === 0) return true;
         const title = (card.dataset.title || "").toLowerCase();
-        const tags = (card.dataset.tags || "").toLowerCase();
-        return title.includes(kw) || tags.includes(kw);
+        const cardTagsStr = (card.dataset.tags || "").toLowerCase();
+        return title.includes(kw) || cardTagsStr.includes(kw);
       });
 
       const sorted = filtered.sort((a, b) => {
