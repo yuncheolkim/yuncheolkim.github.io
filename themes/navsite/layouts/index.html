@@ -13,21 +13,7 @@
 <section class="hero panel">
   <div class="hero__badge">导航精选</div>
   <h1 class="hero__title">{{ .Site.Title }}</h1>
-  <p class="hero__desc">{{ with .Site.Params.description }}{{ . }}{{ else }}收集常用站点、工具与资源，一屏速览。{{ end }}</p>
-  <div class="hero__stats">
-    <div class="stat">
-      <span class="stat__num">{{ $totalLinks }}</span>
-      <span class="stat__label">链接</span>
-    </div>
-    <div class="stat">
-      <span class="stat__num">{{ len $tools }}</span>
-      <span class="stat__label">分类</span>
-    </div>
-    <div class="stat">
-      <span class="stat__num">{{ len $tags }}</span>
-      <span class="stat__label">标签</span>
-    </div>
-  </div>
+
   <div class="filter-bar">
     <div class="filter-row">
       <div class="filter-title">分类筛选</div>

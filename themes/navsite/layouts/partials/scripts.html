@@ -11,14 +11,14 @@
       document.querySelectorAll("#sort-tabs .sort-tab")
     );
 
-    const setActive = (buttons, target) => {
-      buttons.forEach((btn) => btn.classList.toggle("is-active", btn === target));
+    const toggleActive = (btn, on) => {
+      btn.classList.toggle("is-active", on);
     };
 
-    const applyFilterSort = (category, sortKey) => {
+    const applyFilterSort = (categories, sortKey) => {
       const filtered = cards.filter((card) => {
-        if (category === "all") return true;
-        return card.dataset.category === category;
+        if (!categories || categories.size === 0 || categories.has("all")) return true;
+        return categories.has(card.dataset.category);
       });
 
       const sorted = filtered.sort((a, b) => {
@@ -45,25 +45,47 @@
     };
 
     // init
-    applyFilterSort("all", "default");
+    const selectedCats = new Set(["all"]);
+    applyFilterSort(selectedCats, "default");
 
     categoryButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
-        setActive(categoryButtons, btn);
+        const cat = btn.dataset.filter;
+        if (cat === "all") {
+          selectedCats.clear();
+          selectedCats.add("all");
+          categoryButtons.forEach((b) => toggleActive(b, b.dataset.filter === "all"));
+        } else {
+          // toggle selection
+          if (selectedCats.has("all")) selectedCats.delete("all");
+          if (selectedCats.has(cat)) {
+            selectedCats.delete(cat);
+          } else {
+            selectedCats.add(cat);
+          }
+          // if none selected, fallback to all
+          if (selectedCats.size === 0) selectedCats.add("all");
+          categoryButtons.forEach((b) =>
+            toggleActive(b, selectedCats.has(b.dataset.filter))
+          );
+        }
+
         const currentSort =
           sortButtons.find((b) => b.classList.contains("is-active"))?.dataset
             .sort || "default";
-        applyFilterSort(btn.dataset.filter, currentSort);
+        applyFilterSort(selectedCats, currentSort);
       });
     });
 
     sortButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
-        setActive(sortButtons, btn);
+        sortButtons.forEach((b) => toggleActive(b, b === btn));
         const currentFilter =
-          categoryButtons.find((b) => b.classList.contains("is-active"))?.dataset
-            .filter || "all";
-        applyFilterSort(currentFilter, btn.dataset.sort);
+          categoryButtons
+            .filter((b) => b.classList.contains("is-active"))
+            .map((b) => b.dataset.filter);
+        const catSet = new Set(currentFilter.length ? currentFilter : ["all"]);
+        applyFilterSort(catSet, btn.dataset.sort);
       });
     });
   })();
