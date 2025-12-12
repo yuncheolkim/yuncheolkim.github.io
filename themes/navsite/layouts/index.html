@@ -57,7 +57,6 @@
 {{ end }}
 
 <section class="hero panel">
-  <div class="hero__badge">导航精选</div>
   <h1 class="hero__title">{{ .Site.Title }}</h1>
 
   <div class="filter-bar">
@@ -94,7 +93,6 @@
 <section class="panel">
   <div class="section-title">
     <h2>工具列表</h2>
-    <a class="ghost-link" href="{{ "/links/" | relURL }}">查看全部</a>
   </div>
   <div class="card-grid tool-grid" id="tool-grid">
     {{ range $items }}

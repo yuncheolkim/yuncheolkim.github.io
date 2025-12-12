@@ -9,7 +9,8 @@ sort_weight = 3
 name = "OBS Studio"
 url = "https://obsproject.com"
 desc = "开源录屏与直播"
-tags = ["Open Source", "Free"]
+tags = ["Open Source", "Free","录屏","直播"]
+logo = "https://obsproject.com/favicon.ico"
 
 [[links]]
 name = "HandBrake"
@@ -24,14 +25,6 @@ url = "https://www.capcut.com"
 desc = "易用剪辑，支持自动字幕与模板"
 tags = ["Free", "Paid","剪辑"]
 logo = "https://lf3-s.vlabstatic.com/obj/vilab-static/ies/ulike/web/resource/fe_official/assets/imgs/lv/favicon.ico"
-
-[[links]]
-name = "Descript"
-url = "https://www.descript.com"
-desc = "文本驱动的视频剪辑与旁白编辑"
-tags = ["Paid"]
-logo = "https://www.descript.com/favicon.ico"
-
 
 
 [[links]]

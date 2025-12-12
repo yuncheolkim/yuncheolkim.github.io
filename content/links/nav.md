@@ -19,11 +19,5 @@ logo = "https://gohugo.io/favicon.ico"
 
 
 
-[[links]]
-name = "FutureTools"
-url = "https://www.futuretools.io/"
-desc = "AI 工具集合与导航"
-tags = ["AI", "Aggregators"]
-
 +++
 
