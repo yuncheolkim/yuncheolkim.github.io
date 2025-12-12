@@ -1,6 +1,6 @@
 baseURL = 'https://yuncheolkim.github.io/'
 languageCode = 'en-us'
-title = '资源导航'
+title = '骑驴找马'
 theme = "navsite"
 canonifyURLs = true
 

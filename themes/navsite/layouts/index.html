@@ -43,24 +43,18 @@
         {{ end }}
       </div>
     </div>
-    <div class="filter-row">
-      <div class="filter-title">排序</div>
-      <div class="sort-tabs" id="sort-tabs">
-        <button class="sort-tab is-active" data-sort="default">默认</button>
-        <button class="sort-tab" data-sort="date">最新</button>
-        <button class="sort-tab" data-sort="popular">最受欢迎</button>
-        <button class="sort-tab" data-sort="alpha">字母顺序</button>
-      </div>
-    </div>
+
     {{ if gt (len $tags) 0 }}
     <div class="filter-row">
-      <div class="filter-title">全站标签</div>
-      <div class="tag-cloud tag-cloud--muted">
+      <div class="filter-title">标签筛选</div>
+      <div class="tag-cloud" id="tag-filter">
+        <button class="tag-pill is-active" data-tag="all">All</button>
         {{ range $tags }}
-          <span class="tag-chip">{{ . }}</span>
+          <button class="tag-pill" data-tag="{{ . | urlize }}">{{ . }}</button>
         {{ end }}
       </div>
     </div>
+
     {{ end }}
   </div>
 </section>
@@ -81,7 +75,7 @@
         rel="noopener"
         data-category="{{ .cat | urlize }}"
         data-title="{{ $title }}"
-        data-tags="{{ with .tags }}{{ delimit . " " | urlize }}{{ end }}"
+        data-tags="{{ with .tags }}{{ range $i, $t := . }}{{ if $i }} {{ end }}{{ $t | urlize }}{{ end }}{{ end }}"
         data-date="{{ .date.Format "2006-01-02" }}"
         data-popular="{{ or .popularity 0 }}">
         <div class="card__header">
@@ -95,6 +89,7 @@
           <div class="pill">{{ .cat | default "未分类" }}</div>
         </div>
         <div class="card__title">{{ $title }}</div>
+        {{ with .desc }}<p class="card__desc">{{ . }}</p>{{ end }}
       </a>
     {{ end }}
   </div>
@@ -105,7 +100,7 @@
 {{ if gt (len $posts) 0 }}
 <section class="panel">
   <div class="section-title">
-    <h2>更新</h2>
+    <h2>博客</h2>
     <a class="ghost-link" href="{{ "/posts/" | relURL }}">更多</a>
   </div>
   <div class="card-grid">

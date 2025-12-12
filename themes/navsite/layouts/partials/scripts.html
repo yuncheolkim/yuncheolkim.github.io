@@ -7,6 +7,9 @@
     const categoryButtons = Array.from(
       document.querySelectorAll("#category-filter .tag-pill")
     );
+    const tagButtons = Array.from(
+      document.querySelectorAll("#tag-filter .tag-pill")
+    );
     const sortButtons = Array.from(
       document.querySelectorAll("#sort-tabs .sort-tab")
     );
@@ -16,13 +19,19 @@
       btn.classList.toggle("is-active", on);
     };
 
-    const applyFilterSort = (categories, sortKey, keyword) => {
+    const applyFilterSort = (categories, tags, sortKey, keyword) => {
       const kw = (keyword || "").trim().toLowerCase();
 
       const filtered = cards.filter((card) => {
         const catOk =
           !categories || categories.size === 0 || categories.has("all") || categories.has(card.dataset.category);
         if (!catOk) return false;
+
+        if (tags && tags.size > 0 && !tags.has("all")) {
+          const cardTags = new Set((card.dataset.tags || "").split(" ").filter(Boolean));
+          const hit = Array.from(tags).some((t) => cardTags.has(t));
+          if (!hit) return false;
+        }
 
         if (kw.length === 0) return true;
         const title = (card.dataset.title || "").toLowerCase();
@@ -55,8 +64,9 @@
 
     // init
     const selectedCats = new Set(["all"]);
+    const selectedTags = new Set(["all"]);
     let currentKeyword = "";
-    applyFilterSort(selectedCats, "default", currentKeyword);
+    applyFilterSort(selectedCats, selectedTags, "default", currentKeyword);
 
     categoryButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -83,7 +93,34 @@
         const currentSort =
           sortButtons.find((b) => b.classList.contains("is-active"))?.dataset
             .sort || "default";
-        applyFilterSort(selectedCats, currentSort, currentKeyword);
+        applyFilterSort(selectedCats, selectedTags, currentSort, currentKeyword);
+      });
+    });
+
+    tagButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const tag = btn.dataset.tag;
+        if (tag === "all") {
+          selectedTags.clear();
+          selectedTags.add("all");
+          tagButtons.forEach((b) => toggleActive(b, b.dataset.tag === "all"));
+        } else {
+          if (selectedTags.has("all")) selectedTags.delete("all");
+          if (selectedTags.has(tag)) {
+            selectedTags.delete(tag);
+          } else {
+            selectedTags.add(tag);
+          }
+          if (selectedTags.size === 0) selectedTags.add("all");
+          tagButtons.forEach((b) =>
+            toggleActive(b, selectedTags.has(b.dataset.tag))
+          );
+        }
+
+        const currentSort =
+          sortButtons.find((b) => b.classList.contains("is-active"))?.dataset
+            .sort || "default";
+        applyFilterSort(selectedCats, selectedTags, currentSort, currentKeyword);
       });
     });
 
@@ -95,7 +132,7 @@
             .filter((b) => b.classList.contains("is-active"))
             .map((b) => b.dataset.filter);
         const catSet = new Set(currentFilter.length ? currentFilter : ["all"]);
-        applyFilterSort(catSet, btn.dataset.sort, currentKeyword);
+        applyFilterSort(catSet, selectedTags, btn.dataset.sort, currentKeyword);
       });
     });
 
@@ -110,7 +147,7 @@
             .filter((b) => b.classList.contains("is-active"))
             .map((b) => b.dataset.filter);
         const catSet = new Set(currentFilter.length ? currentFilter : ["all"]);
-        applyFilterSort(catSet, currentSort, currentKeyword);
+        applyFilterSort(catSet, selectedTags, currentSort, currentKeyword);
       });
     }
   })();
