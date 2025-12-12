@@ -688,6 +688,26 @@ a {
   border: 1px solid var(--border);
 }
 
+.prose img[style] {
+  max-width: none;
+}
+
+/* KaTeX Math Formula Styles */
+.prose .katex {
+  font-size: 1.1em;
+}
+
+.prose .katex-display {
+  margin: 20px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.prose .katex-display > .katex {
+  display: inline-block;
+  text-align: initial;
+}
+
 .link-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));

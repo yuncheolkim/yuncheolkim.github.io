@@ -1,0 +1,13 @@
+{{ $src := .Get "src" | default (.Get 0) }}
+{{ $alt := .Get "alt" | default "" }}
+{{ $width := .Get "width" | default "" }}
+{{ $height := .Get "height" | default "" }}
+{{ $style := .Get "style" | default "" }}
+
+{{ $attrs := slice }}
+{{ if $width }}{{ $attrs = $attrs | append (printf "width=\"%s\"" $width) }}{{ end }}
+{{ if $height }}{{ $attrs = $attrs | append (printf "height=\"%s\"" $height) }}{{ end }}
+{{ if $style }}{{ $attrs = $attrs | append (printf "style=\"%s\"" $style) }}{{ end }}
+
+<img src="{{ $src | relURL }}" alt="{{ $alt }}" {{ delimit $attrs " " }} class="prose-img" />
+

@@ -5,5 +5,23 @@
   <link rel="canonical" href="{{ .Permalink }}">
   {{ with .Site.Params.favicon }}<link rel="icon" href="{{ . | relURL }}">{{ else }}<link rel="icon" href="{{ "favicon.png" | relURL }}">{{ end }}
   <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
+  {{ if or .Params.math .Params.params.math .Site.Params.math }}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117n7w6ODWuhRz49M8xcn0g4H3F2N6VqQ5T2y4qJ4x7F1m" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\\[", right: "\\]", display: true},
+          {left: "\\(", right: "\\)", display: false}
+        ],
+        throwOnError: false
+      });
+    });
+  </script>
+  {{ end }}
   {{ block "extra_head" . }}{{ end }}
 

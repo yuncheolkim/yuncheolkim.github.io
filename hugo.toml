@@ -4,6 +4,15 @@ title = '骑驴找马'
 theme = "navsite"
 canonifyURLs = true
 
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.goldmark.extensions]
+    [markup.goldmark.extensions.attribute]
+      block = true
+      title = true
+
 [[menu.main]]
 name = "导航"
 url = "/links/"
