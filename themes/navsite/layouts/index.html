@@ -55,6 +55,7 @@
   <div class="card-grid tool-grid" id="tool-grid">
     {{ range sort $tools "Title" }}
       {{ $cat := or .Params.category (index .Params.tags 0) }}
+      {{ $logo := .Params.logo }}
       <a class="card card--tool"
         href="{{ .RelPermalink }}"
         data-category="{{ $cat | urlize }}"
@@ -62,6 +63,13 @@
         data-date="{{ .Date.Format "2006-01-02" }}"
         data-popular="{{ or .Params.popularity 0 }}">
         <div class="card__header">
+          <span class="card__logo">
+            {{ with $logo }}
+              <img src="{{ . }}" alt="{{ $.Title }} logo" loading="lazy">
+            {{ else }}
+              <span class="logo-fallback">{{ substr $.Title 0 1 }}</span>
+            {{ end }}
+          </span>
           <div class="pill">{{ $cat | default "未分类" }}</div>
         </div>
         <div class="card__title">{{ .Title }}</div>

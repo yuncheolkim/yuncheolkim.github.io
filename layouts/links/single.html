@@ -9,6 +9,13 @@
     <div class="link-grid">
       {{ range . }}
         <a class="link-card" href="{{ .url }}" target="_blank" rel="noopener">
+          <span class="card__logo">
+            {{ with .logo }}
+              <img src="{{ . }}" alt="{{ .name }} logo" loading="lazy">
+            {{ else }}
+              <span class="logo-fallback">{{ substr .name 0 1 }}</span>
+            {{ end }}
+          </span>
           <div class="link-card__title">{{ .name }}</div>
           {{ with .desc }}<div class="link-card__desc">{{ . }}</div>{{ end }}
         </a>

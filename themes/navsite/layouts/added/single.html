@@ -13,6 +13,7 @@
         "tags" .tags
         "cat" $cat
         "date" $date
+        "logo" .logo
       )) }}
     {{ end }}
   {{ end }}
@@ -29,6 +30,13 @@
     {{ range first 30 $items }}
       <a class="card card--tool" href="{{ .url }}" target="_blank" rel="noopener">
         <div class="card__header">
+          <span class="card__logo">
+            {{ with .logo }}
+              <img src="{{ . }}" alt="{{ .title }} logo" loading="lazy">
+            {{ else }}
+              <span class="logo-fallback">{{ substr .title 0 1 }}</span>
+            {{ end }}
+          </span>
           <div class="pill">{{ .cat | default "未分类" }}</div>
           <div class="card__labels">
             <span class="label">{{ .date.Format "2006-01-02" }}</span>
