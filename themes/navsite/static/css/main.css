@@ -396,6 +396,44 @@ a {
   line-height: 1.5;
 }
 
+.tag-row {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-badge {
+  font-size: 0.82rem;
+  line-height: 1;
+  padding: 6px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  background: rgba(124, 200, 255, 0.12);
+}
+
+.tag-badge:nth-child(4n + 1) {
+  background: rgba(124, 240, 198, 0.14);
+}
+
+.tag-badge:nth-child(4n + 2) {
+  background: rgba(124, 200, 255, 0.14);
+}
+
+.tag-badge:nth-child(4n + 3) {
+  background: rgba(255, 204, 102, 0.14);
+}
+
+.tag-badge:nth-child(4n) {
+  background: rgba(255, 122, 188, 0.14);
+}
+
+.tag-badge--muted {
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.06);
+}
+
 .card--link .card__title {
   font-size: 1.05rem;
 }

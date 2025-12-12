@@ -90,6 +90,14 @@
         </div>
         <div class="card__title">{{ $title }}</div>
         {{ with .desc }}<p class="card__desc">{{ . }}</p>{{ end }}
+        {{ with .tags }}
+          <div class="tag-row">
+            {{ range first 4 . }}
+              <span class="tag-badge">{{ . }}</span>
+            {{ end }}
+            {{ if gt (len .) 4 }}<span class="tag-badge tag-badge--muted">+{{ sub (len .) 4 }}</span>{{ end }}
+          </div>
+        {{ end }}
       </a>
     {{ end }}
   </div>
