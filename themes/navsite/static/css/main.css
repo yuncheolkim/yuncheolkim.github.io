@@ -689,7 +689,12 @@ a {
 }
 
 .prose img[style] {
-  max-width: none;
+  max-width: none !important;
+}
+
+.prose img[width],
+.prose img[height] {
+  max-width: none !important;
 }
 
 /* KaTeX Math Formula Styles */

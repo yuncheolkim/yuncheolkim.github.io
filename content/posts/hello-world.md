@@ -48,7 +48,8 @@ $E = mc^2$ → $E = mc^2$
 ## 链接和图片
 
 - [Hugo 官网](https://gohugo.io/)
-- ![示例图片](/images/github.png){style="width:200px;height:200px;"}
+
+<img src="/images/github.png" alt="示例图片" style="width:200px;height:200px;" />
 
 ```go
 package main
