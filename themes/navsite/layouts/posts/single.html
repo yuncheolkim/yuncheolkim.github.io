@@ -1,26 +1,52 @@
 {{ define "main" }}
-<article class="panel blog-post">
-  <header class="blog-post__header">
-    <h1 class="blog-post__title">{{ .Title }}</h1>
-    <div class="blog-post__meta">
-      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
-      {{ with .Params.tags }}
-        <span class="blog-post__tags">
-          {{ range . }}<a class="tag-badge" href="{{ (printf "/tags/%s/" (urlize .)) | relURL }}">{{ . }}</a>{{ end }}
-        </span>
-      {{ end }}
+{{ $allPosts := where .Site.RegularPages "Section" "posts" }}
+{{ $recentPosts := first 10 (sort $allPosts "Date" "desc") }}
+
+<div class="blog-layout">
+  <aside class="blog-sidebar">
+    <div class="panel">
+      <h2 class="blog-sidebar__title">最近文章</h2>
+      <nav class="blog-sidebar__list">
+        {{ range $recentPosts }}
+          <a class="blog-sidebar__item {{ if eq .RelPermalink $.RelPermalink }}is-active{{ end }}" href="{{ .RelPermalink }}">
+            <div class="blog-sidebar__item-title">{{ .Title }}</div>
+            <div class="blog-sidebar__item-meta">
+              <time>{{ .Date.Format "2006-01-02" }}</time>
+            </div>
+          </a>
+        {{ end }}
+      </nav>
+      <div class="blog-sidebar__footer">
+        <a class="ghost-link" href="{{ "/posts/" | relURL }}">查看全部</a>
+      </div>
     </div>
-    {{ with .Params.summary }}<p class="blog-post__subtitle">{{ . }}</p>{{ end }}
-  </header>
+  </aside>
 
-  <div class="prose">
-    {{ .Content }}
-  </div>
+  <main class="blog-content">
+    <article class="panel blog-post">
+      <header class="blog-post__header">
+        <h1 class="blog-post__title">{{ .Title }}</h1>
+        <div class="blog-post__meta">
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+          {{ with .Params.tags }}
+            <span class="blog-post__tags">
+              {{ range . }}<a class="tag-badge" href="{{ (printf "/tags/%s/" (urlize .)) | relURL }}">{{ . }}</a>{{ end }}
+            </span>
+          {{ end }}
+        </div>
+        {{ with .Params.summary }}<p class="blog-post__subtitle">{{ . }}</p>{{ end }}
+      </header>
 
-  <footer class="blog-post__footer">
-    <a class="ghost-link" href="{{ "/posts/" | relURL }}">← 返回博客</a>
-  </footer>
-</article>
+      <div class="prose">
+        {{ .Content }}
+      </div>
+
+      <footer class="blog-post__footer">
+        <a class="ghost-link" href="{{ "/posts/" | relURL }}">← 返回博客</a>
+      </footer>
+    </article>
+  </main>
+</div>
 {{ end }}
 
 

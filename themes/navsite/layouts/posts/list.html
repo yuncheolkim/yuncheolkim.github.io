@@ -1,46 +1,58 @@
 {{ define "main" }}
 {{ $p := .Paginate .Pages 10 }}
+{{ $firstPost := index $p.Pages 0 }}
 
-<section class="panel blog">
-  <header class="blog__header">
-    <h1 class="blog__title">{{ .Title }}</h1>
-    {{ with .Params.summary }}<p class="blog__subtitle">{{ . }}</p>{{ end }}
-  </header>
-
-  <div class="blog-list">
-    {{ range $p.Pages }}
-      <article class="blog-item">
-        <div class="blog-item__meta">
-          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
-          {{ with .Params.tags }}
-            <span class="blog-item__tags">
-              {{ range first 4 . }}<span class="tag-badge">{{ . }}</span>{{ end }}
-            </span>
-          {{ end }}
-        </div>
-        <h2 class="blog-item__title">
-          <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-        </h2>
-        {{ with .Params.summary }}
-          <p class="blog-item__summary">{{ . }}</p>
-        {{ else }}
-          {{ with .Summary }}<p class="blog-item__summary">{{ . | plainify | truncate 220 }}</p>{{ end }}
+<div class="blog-layout">
+  <aside class="blog-sidebar">
+    <div class="panel">
+      <h2 class="blog-sidebar__title">最近文章</h2>
+      <nav class="blog-sidebar__list">
+        {{ range $p.Pages }}
+          <a class="blog-sidebar__item {{ if eq .RelPermalink $firstPost.RelPermalink }}is-active{{ end }}" href="{{ .RelPermalink }}">
+            <div class="blog-sidebar__item-title">{{ .Title }}</div>
+            <div class="blog-sidebar__item-meta">
+              <time>{{ .Date.Format "2006-01-02" }}</time>
+            </div>
+          </a>
         {{ end }}
-        <div class="blog-item__more">
-          <a class="ghost-link" href="{{ .RelPermalink }}">阅读全文</a>
+      </nav>
+      {{ if gt $p.TotalPages 1 }}
+        <div class="blog-sidebar__pagination">
+          {{ if $p.HasPrev }}<a class="ghost-link" href="{{ $p.Prev.URL }}">上一页</a>{{ end }}
+          <span class="blog-pagination__info">第 {{ $p.PageNumber }} / {{ $p.TotalPages }} 页</span>
+          {{ if $p.HasNext }}<a class="ghost-link" href="{{ $p.Next.URL }}">下一页</a>{{ end }}
+        </div>
+      {{ end }}
+    </div>
+  </aside>
+
+  <main class="blog-content">
+    {{ if $firstPost }}
+      <article class="panel blog-post">
+        <header class="blog-post__header">
+          <h1 class="blog-post__title">{{ $firstPost.Title }}</h1>
+          <div class="blog-post__meta">
+            <time datetime="{{ $firstPost.Date.Format "2006-01-02" }}">{{ $firstPost.Date.Format "2006-01-02" }}</time>
+            {{ with $firstPost.Params.tags }}
+              <span class="blog-post__tags">
+                {{ range . }}<a class="tag-badge" href="{{ (printf "/tags/%s/" (urlize .)) | relURL }}">{{ . }}</a>{{ end }}
+              </span>
+            {{ end }}
+          </div>
+          {{ with $firstPost.Params.summary }}<p class="blog-post__subtitle">{{ . }}</p>{{ end }}
+        </header>
+
+        <div class="prose">
+          {{ $firstPost.Content }}
         </div>
       </article>
+    {{ else }}
+      <div class="panel">
+        <p>暂无文章</p>
+      </div>
     {{ end }}
-  </div>
-
-  {{ if gt $p.TotalPages 1 }}
-    <nav class="blog-pagination" aria-label="Pagination">
-      {{ if $p.HasPrev }}<a class="ghost-link" href="{{ $p.Prev.URL }}">上一页</a>{{ end }}
-      <span class="blog-pagination__info">第 {{ $p.PageNumber }} / {{ $p.TotalPages }} 页</span>
-      {{ if $p.HasNext }}<a class="ghost-link" href="{{ $p.Next.URL }}">下一页</a>{{ end }}
-    </nav>
-  {{ end }}
-</section>
+  </main>
+</div>
 {{ end }}
 
 
