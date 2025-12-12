@@ -8,16 +8,17 @@
   {{ with .Params.links }}
     <div class="link-grid">
       {{ range . }}
-        <a class="link-card" href="{{ .url }}" target="_blank" rel="noopener">
+        {{ $link := . }}
+        <a class="link-card" href="{{ $link.url }}" target="_blank" rel="noopener">
           <span class="card__logo">
-            {{ with .logo }}
-              <img src="{{ . }}" alt="{{ .name }} logo" loading="lazy">
+            {{ with $link.logo }}
+              <img src="{{ . }}" alt="{{ $link.name }} logo" loading="lazy">
             {{ else }}
-              <span class="logo-fallback">{{ substr .name 0 1 }}</span>
+              <span class="logo-fallback">{{ substr $link.name 0 1 }}</span>
             {{ end }}
           </span>
-          <div class="link-card__title">{{ .name }}</div>
-          {{ with .desc }}<div class="link-card__desc">{{ . }}</div>{{ end }}
+          <div class="link-card__title">{{ $link.name }}</div>
+          {{ with $link.desc }}<div class="link-card__desc">{{ . }}</div>{{ end }}
         </a>
       {{ end }}
     </div>

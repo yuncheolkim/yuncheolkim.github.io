@@ -7,6 +7,7 @@ category = "Screenshot"
 [[links]]
 name = "Snipaste"
 url = "https://www.snipaste.com"
+logo = "https://www.snipaste.com/img/logo.svg"
 desc = "Windows/macOS 轻量截图与贴图"
 
 [[links]]
