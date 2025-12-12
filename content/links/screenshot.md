@@ -3,6 +3,7 @@ title = "截图工具"
 summary = "常用截图与贴图工具合集"
 tags = ["截图", "工具", "Productivity"]
 category = "截图"
+sort_weight = 4
 
 [[links]]
 name = "Snipaste"
@@ -15,7 +16,7 @@ tags = ["截图"]
 name = "ShareX"
 url = "https://getsharex.com"
 desc = "Windows 开源截图、录屏与上传自动化"
-tags = ["Open Source", "Free"]
+tags = ["Open Source", "Free","截图","录屏"]
 logo = "https://getsharex.com/favicon.ico"
 
 [[links]]

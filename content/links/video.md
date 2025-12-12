@@ -3,7 +3,7 @@ title = "视频工具"
 summary = "剪辑、录屏、转码与AI视频辅助"
 tags = ["视频", "工具", "剪辑"]
 category = "视频"
-
+sort_weight = 3
 
 [[links]]
 name = "OBS Studio"

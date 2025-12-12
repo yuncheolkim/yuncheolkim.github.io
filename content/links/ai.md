@@ -14,6 +14,13 @@ logo = "https://chat.openai.com/favicon.ico"
 
 
 [[links]]
+name = "banana"
+url = "https://banananano.ai/"
+desc = "一个基于AI的图像生成器，可以生成各种图像，包括人物、动物、风景等。"
+tags = ["图片","3D模型"]
+logo = "https://banananano.ai/favicon.ico"
+
+[[links]]
 name = "canva"
 url = "https://www.canva.com/templates"
 desc = "图片编辑, 设计, 网站, 简历等"

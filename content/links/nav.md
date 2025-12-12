@@ -2,7 +2,8 @@
 title = "常用工具"
 summary = "开发与效率常用站点"
 tags = ["导航", "工具"]
-sort_weight = 1
+category = "编程"
+sort_weight = 5
 
 [[links]]
 name = "GitHub"
