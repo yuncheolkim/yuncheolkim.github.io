@@ -1,5 +1,5 @@
 {{ define "main" }}
-{{/* 聚合所有 links 页内的工具，按父页面日期倒序 */}}
+{{/* 与 layouts/added/single.html 同步：聚合 links 内的工具并按日期倒序 */}}
 {{ $scratch := newScratch }}
 {{ range $p := where .Site.RegularPages "Section" "links" }}
   {{ $cat := or $p.Params.category (index $p.Params.tags 0) }}

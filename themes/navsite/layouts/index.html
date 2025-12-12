@@ -77,16 +77,8 @@
         data-popular="{{ or .Params.popularity 0 }}">
         <div class="card__header">
           <div class="pill">{{ $cat | default "未分类" }}</div>
-          <div class="card__labels">
-            {{ with .Params.tags }}
-              {{ range first 3 . }}
-                <span class="label">{{ . }}</span>
-              {{ end }}
-            {{ end }}
-          </div>
         </div>
         <div class="card__title">{{ .Title }}</div>
-        {{ with .Params.summary }}<p class="card__desc">{{ . }}</p>{{ end }}
       </a>
     {{ end }}
   </div>
