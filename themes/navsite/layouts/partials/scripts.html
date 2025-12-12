@@ -10,15 +10,24 @@
     const sortButtons = Array.from(
       document.querySelectorAll("#sort-tabs .sort-tab")
     );
+    const searchBox = document.querySelector("#tool-search");
 
     const toggleActive = (btn, on) => {
       btn.classList.toggle("is-active", on);
     };
 
-    const applyFilterSort = (categories, sortKey) => {
+    const applyFilterSort = (categories, sortKey, keyword) => {
+      const kw = (keyword || "").trim().toLowerCase();
+
       const filtered = cards.filter((card) => {
-        if (!categories || categories.size === 0 || categories.has("all")) return true;
-        return categories.has(card.dataset.category);
+        const catOk =
+          !categories || categories.size === 0 || categories.has("all") || categories.has(card.dataset.category);
+        if (!catOk) return false;
+
+        if (kw.length === 0) return true;
+        const title = (card.dataset.title || "").toLowerCase();
+        const tags = (card.dataset.tags || "").toLowerCase();
+        return title.includes(kw) || tags.includes(kw);
       });
 
       const sorted = filtered.sort((a, b) => {
@@ -46,7 +55,8 @@
 
     // init
     const selectedCats = new Set(["all"]);
-    applyFilterSort(selectedCats, "default");
+    let currentKeyword = "";
+    applyFilterSort(selectedCats, "default", currentKeyword);
 
     categoryButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -73,7 +83,7 @@
         const currentSort =
           sortButtons.find((b) => b.classList.contains("is-active"))?.dataset
             .sort || "default";
-        applyFilterSort(selectedCats, currentSort);
+        applyFilterSort(selectedCats, currentSort, currentKeyword);
       });
     });
 
@@ -85,9 +95,24 @@
             .filter((b) => b.classList.contains("is-active"))
             .map((b) => b.dataset.filter);
         const catSet = new Set(currentFilter.length ? currentFilter : ["all"]);
-        applyFilterSort(catSet, btn.dataset.sort);
+        applyFilterSort(catSet, btn.dataset.sort, currentKeyword);
       });
     });
+
+    if (searchBox) {
+      searchBox.addEventListener("input", () => {
+        currentKeyword = searchBox.value || "";
+        const currentSort =
+          sortButtons.find((b) => b.classList.contains("is-active"))?.dataset
+            .sort || "default";
+        const currentFilter =
+          categoryButtons
+            .filter((b) => b.classList.contains("is-active"))
+            .map((b) => b.dataset.filter);
+        const catSet = new Set(currentFilter.length ? currentFilter : ["all"]);
+        applyFilterSort(catSet, currentSort, currentKeyword);
+      });
+    }
   })();
 </script>
 
