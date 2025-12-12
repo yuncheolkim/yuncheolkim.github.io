@@ -9,10 +9,6 @@ url = "https://github.com"
 desc = "代码托管与协作"
 logo = "/images/github.png"
 
-[[links]]
-name = "ChatGPT"
-url = "https://chat.openai.com"
-desc = "AI 对话与生成"
 
 [[links]]
 name = "MDN Web Docs"
