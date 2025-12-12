@@ -1,0 +1,10 @@
+name = "navsite"
+license = "MIT"
+licenselink = "https://opensource.org/licenses/MIT"
+description = "Minimal navigation-style Hugo theme for link collections"
+min_version = "0.128.0"
+
+[author]
+  name = "navsite"
+  homepage = "https://yuncheolkim.github.io/"
+

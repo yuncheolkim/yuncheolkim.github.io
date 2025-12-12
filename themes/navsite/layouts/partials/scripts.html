@@ -1,0 +1,71 @@
+<script>
+  (() => {
+    const grid = document.querySelector("#tool-grid");
+    if (!grid) return;
+
+    const cards = Array.from(grid.querySelectorAll(".card--tool"));
+    const categoryButtons = Array.from(
+      document.querySelectorAll("#category-filter .tag-pill")
+    );
+    const sortButtons = Array.from(
+      document.querySelectorAll("#sort-tabs .sort-tab")
+    );
+
+    const setActive = (buttons, target) => {
+      buttons.forEach((btn) => btn.classList.toggle("is-active", btn === target));
+    };
+
+    const applyFilterSort = (category, sortKey) => {
+      const filtered = cards.filter((card) => {
+        if (category === "all") return true;
+        return card.dataset.category === category;
+      });
+
+      const sorted = filtered.sort((a, b) => {
+        if (sortKey === "date") {
+          return (
+            new Date(b.dataset.date || 0).getTime() -
+            new Date(a.dataset.date || 0).getTime()
+          );
+        }
+        if (sortKey === "popular") {
+          return (parseInt(b.dataset.popular || "0", 10) || 0) -
+                 (parseInt(a.dataset.popular || "0", 10) || 0);
+        }
+        if (sortKey === "alpha") {
+          return (a.dataset.title || "").localeCompare(b.dataset.title || "");
+        }
+        return 0; // default
+      });
+
+      // hide all first
+      cards.forEach((c) => (c.style.display = "none"));
+      sorted.forEach((c) => (c.style.display = ""));
+      grid.classList.toggle("empty", sorted.length === 0);
+    };
+
+    // init
+    applyFilterSort("all", "default");
+
+    categoryButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        setActive(categoryButtons, btn);
+        const currentSort =
+          sortButtons.find((b) => b.classList.contains("is-active"))?.dataset
+            .sort || "default";
+        applyFilterSort(btn.dataset.filter, currentSort);
+      });
+    });
+
+    sortButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        setActive(sortButtons, btn);
+        const currentFilter =
+          categoryButtons.find((b) => b.classList.contains("is-active"))?.dataset
+            .filter || "all";
+        applyFilterSort(currentFilter, btn.dataset.sort);
+      });
+    });
+  })();
+</script>
+

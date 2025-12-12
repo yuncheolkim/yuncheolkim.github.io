@@ -1,0 +1,117 @@
+{{ define "main" }}
+{{ $tools := where .Site.RegularPages "Section" "links" }}
+{{ $scratch := newScratch }}
+{{ range $tools }}
+  {{ with .Params.links }}{{ $scratch.Add "totalLinks" (len .) }}{{ end }}
+  {{ with .Params.tags }}{{ range . }}{{ $scratch.Add "allTags" (slice .) }}{{ end }}{{ end }}
+  {{ with .Params.category }}{{ $scratch.Add "categories" (slice .) }}{{ else }}{{ with .Params.tags }}{{ $first := index . 0 }}{{ if $first }}{{ $scratch.Add "categories" (slice $first) }}{{ end }}{{ end }}{{ end }}
+{{ end }}
+{{ $totalLinks := $scratch.Get "totalLinks" | default 0 }}
+{{ $tags := sort (uniq ($scratch.Get "allTags" | default (slice))) }}
+{{ $categories := sort (uniq ($scratch.Get "categories" | default (slice))) }}
+
+<section class="hero panel">
+  <div class="hero__badge">导航精选</div>
+  <h1 class="hero__title">{{ .Site.Title }}</h1>
+  <p class="hero__desc">{{ with .Site.Params.description }}{{ . }}{{ else }}收集常用站点、工具与资源，一屏速览。{{ end }}</p>
+  <div class="hero__stats">
+    <div class="stat">
+      <span class="stat__num">{{ $totalLinks }}</span>
+      <span class="stat__label">链接</span>
+    </div>
+    <div class="stat">
+      <span class="stat__num">{{ len $tools }}</span>
+      <span class="stat__label">分类</span>
+    </div>
+    <div class="stat">
+      <span class="stat__num">{{ len $tags }}</span>
+      <span class="stat__label">标签</span>
+    </div>
+  </div>
+  <div class="filter-bar">
+    <div class="filter-row">
+      <div class="filter-title">分类筛选</div>
+      <div class="tag-cloud" id="category-filter">
+        <button class="tag-pill is-active" data-filter="all">All</button>
+        {{ range $categories }}
+          <button class="tag-pill" data-filter="{{ . | urlize }}">{{ . }}</button>
+        {{ end }}
+      </div>
+    </div>
+    <div class="filter-row">
+      <div class="filter-title">排序</div>
+      <div class="sort-tabs" id="sort-tabs">
+        <button class="sort-tab is-active" data-sort="default">默认</button>
+        <button class="sort-tab" data-sort="date">最新</button>
+        <button class="sort-tab" data-sort="popular">最受欢迎</button>
+        <button class="sort-tab" data-sort="alpha">字母顺序</button>
+      </div>
+    </div>
+    {{ if gt (len $tags) 0 }}
+    <div class="filter-row">
+      <div class="filter-title">全站标签</div>
+      <div class="tag-cloud tag-cloud--muted">
+        {{ range $tags }}
+          <span class="tag-chip">{{ . }}</span>
+        {{ end }}
+      </div>
+    </div>
+    {{ end }}
+  </div>
+</section>
+
+{{ if gt (len $tools) 0 }}
+<section class="panel">
+  <div class="section-title">
+    <h2>工具列表</h2>
+    <a class="ghost-link" href="{{ "/links/" | relURL }}">查看全部</a>
+  </div>
+  <div class="card-grid tool-grid" id="tool-grid">
+    {{ range sort $tools "Title" }}
+      {{ $cat := or .Params.category (index .Params.tags 0) }}
+      <a class="card card--tool"
+        href="{{ .RelPermalink }}"
+        data-category="{{ $cat | urlize }}"
+        data-title="{{ .Title }}"
+        data-date="{{ .Date.Format "2006-01-02" }}"
+        data-popular="{{ or .Params.popularity 0 }}">
+        <div class="card__header">
+          <div class="pill">{{ $cat | default "未分类" }}</div>
+          <div class="card__labels">
+            {{ with .Params.tags }}
+              {{ range first 3 . }}
+                <span class="label">{{ . }}</span>
+              {{ end }}
+            {{ end }}
+          </div>
+        </div>
+        <div class="card__title">{{ .Title }}</div>
+        {{ with .Params.summary }}<p class="card__desc">{{ . }}</p>{{ end }}
+      </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+
+{{ $posts := where .Site.RegularPages "Section" "posts" }}
+{{ if gt (len $posts) 0 }}
+<section class="panel">
+  <div class="section-title">
+    <h2>更新</h2>
+    <a class="ghost-link" href="{{ "/posts/" | relURL }}">更多</a>
+  </div>
+  <div class="card-grid">
+    {{ range first 6 (sort $posts "Date" "desc") }}
+      <a class="card" href="{{ .RelPermalink }}">
+        <div class="card__header">
+          <div class="pill pill--muted">{{ .Date.Format "2006-01-02" }}</div>
+        </div>
+        <div class="card__title">{{ .Title }}</div>
+        {{ with .Summary }}<p class="card__desc">{{ . | plainify | truncate 120 }}</p>{{ end }}
+      </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+{{ end }}
+

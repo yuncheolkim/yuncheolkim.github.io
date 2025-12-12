@@ -1,0 +1,15 @@
+{{ define "main" }}
+<article class="panel post">
+  <header class="post__header">
+    <h1>{{ .Title }}</h1>
+    <p class="post__subtitle">
+      {{ .Date.Format "2006-01-02" }}
+      {{ with .Params.tags }} • {{ delimit . ", " }}{{ end }}
+    </p>
+  </header>
+  <div class="post__content">
+    {{ .Content }}
+  </div>
+</article>
+{{ end }}
+

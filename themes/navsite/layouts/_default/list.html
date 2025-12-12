@@ -1,0 +1,16 @@
+{{ define "main" }}
+<section class="panel">
+  <div class="section-title">
+    <h2>{{ .Title }}</h2>
+  </div>
+  <div class="card-grid">
+    {{ range .Pages }}
+      <a class="card" href="{{ .RelPermalink }}">
+        <div class="card__title">{{ .Title }}</div>
+        {{ with .Params.summary }}<p class="card__desc">{{ . }}</p>{{ else }}{{ with .Summary }}<p class="card__desc">{{ . | plainify | truncate 140 }}</p>{{ end }}{{ end }}
+      </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+

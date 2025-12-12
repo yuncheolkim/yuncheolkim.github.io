@@ -1,0 +1,22 @@
+{{ define "main" }}
+<article class="panel post">
+  <header class="post__header">
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.summary }}<p class="post__subtitle">{{ . }}</p>{{ end }}
+  </header>
+
+  {{ with .Params.links }}
+    <div class="link-grid">
+      {{ range . }}
+        <a class="link-card" href="{{ .url }}" target="_blank" rel="noopener">
+          <div class="link-card__title">{{ .name }}</div>
+          {{ with .desc }}<div class="link-card__desc">{{ . }}</div>{{ end }}
+        </a>
+      {{ end }}
+    </div>
+  {{ else }}
+    <p>暂无链接，稍后再来。</p>
+  {{ end }}
+</article>
+{{ end }}
+

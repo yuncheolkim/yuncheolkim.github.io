@@ -1,0 +1,45 @@
+{{ define "main" }}
+{{/* 聚合所有 links 页内的工具，按父页面日期倒序 */}}
+{{ $items := slice }}
+{{ range $p := where .Site.RegularPages "Section" "links" }}
+  {{ $cat := or $p.Params.category (index $p.Params.tags 0) }}
+  {{ $date := $p.Date }}
+  {{ with $p.Params.links }}
+    {{ range . }}
+      {{ $items = append $items (dict
+        "title" .name
+        "desc" .desc
+        "url" .url
+        "tags" .tags
+        "cat" $cat
+        "date" $date
+      ) }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+{{ $items = sort $items "date" "desc" }}
+
+<section class="panel">
+  <div class="section-title">
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.summary }}<p class="card__desc">{{ . }}</p>{{ end }}
+  </div>
+
+  <div class="card-grid">
+    {{ range first 30 $items }}
+      <a class="card card--tool" href="{{ .url }}" target="_blank" rel="noopener">
+        <div class="card__header">
+          <div class="pill">{{ .cat | default "未分类" }}</div>
+          <div class="card__labels">
+            <span class="label">{{ .date.Format "2006-01-02" }}</span>
+            {{ with .tags }}{{ range first 2 . }}<span class="label">{{ . }}</span>{{ end }}{{ end }}
+          </div>
+        </div>
+        <div class="card__title">{{ .title }}</div>
+        {{ with .desc }}<p class="card__desc">{{ . }}</p>{{ end }}
+      </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+

@@ -1,5 +1,30 @@
 baseURL = 'https://yuncheolkim.github.io/'
 languageCode = 'en-us'
-title = 'My New Hugo Site'
-theme = "terminal"
+title = '资源导航'
+theme = "navsite"
 canonifyURLs = true
+
+[[menu.main]]
+name = "导航"
+url = "/links/"
+weight = 1
+
+[[menu.main]]
+name = "今日新增"
+url = "/added-today/"
+weight = 3
+
+[[menu.main]]
+name = "AI 新闻"
+url = "/posts/"
+weight = 4
+
+[[menu.main]]
+name = "视频"
+url = "/posts/"
+weight = 5
+
+[[menu.main]]
+name = "提交工具"
+url = "https://github.com/yuncheolkim/yuncheolkim.github.io/issues/new"
+weight = 6
