@@ -3,8 +3,11 @@
 {{ $scratch := newScratch }}
 {{ range $p := where .Site.RegularPages "Section" "links" }}
   {{ $cat := or $p.Params.category (index $p.Params.tags 0) }}
+  {{ $weight := $p.Params.sort_weight | default 999 }}
   {{ with $p.Params.tags }}{{ range . }}{{ $scratch.Add "allTags" (slice .) }}{{ end }}{{ end }}
-  {{ with $cat }}{{ $scratch.Add "categories" (slice .) }}{{ end }}
+  {{ with $cat }}
+    {{ $scratch.Add "categoryData" (slice (dict "name" . "weight" $weight)) }}
+  {{ end }}
   {{ with $p.Params.links }}
     {{ range . }}
       {{ $scratch.Add "items" (slice (dict
@@ -23,7 +26,35 @@
 {{ $items := sort ($scratch.Get "items" | default slice) "date" "desc" }}
 {{ $totalLinks := len $items }}
 {{ $tags := sort (uniq ($scratch.Get "allTags" | default (slice))) }}
-{{ $categories := sort (uniq ($scratch.Get "categories" | default (slice))) }}
+{{ $categoryData := $scratch.Get "categoryData" | default slice }}
+{{ $categoryMap := dict }}
+{{ range $categoryData }}
+  {{ $name := .name }}
+  {{ $weight := .weight }}
+  {{ $existing := index $categoryMap $name }}
+  {{ if not $existing }}
+    {{ $categoryMap = merge $categoryMap (dict $name $weight) }}
+  {{ else if lt $weight $existing }}
+    {{ $categoryMap = merge $categoryMap (dict $name $weight) }}
+  {{ end }}
+{{ end }}
+{{ $categories := slice }}
+{{ range $categoryData }}
+  {{ $name := .name }}
+  {{ $found := false }}
+  {{ range $categories }}
+    {{ if eq .name $name }}{{ $found = true }}{{ end }}
+  {{ end }}
+  {{ if not $found }}
+    {{ $weight := index $categoryMap $name }}
+    {{ $categories = $categories | append (dict "name" $name "weight" $weight) }}
+  {{ end }}
+{{ end }}
+{{ $categories = sort $categories "weight" }}
+{{ $categoryNames := slice }}
+{{ range $categories }}
+  {{ $categoryNames = $categoryNames | append .name }}
+{{ end }}
 
 <section class="hero panel">
   <div class="hero__badge">导航精选</div>
@@ -38,7 +69,7 @@
       <div class="filter-title">分类筛选</div>
       <div class="tag-cloud" id="category-filter">
         <button class="tag-pill is-active" data-filter="all">All</button>
-        {{ range $categories }}
+        {{ range $categoryNames }}
           <button class="tag-pill" data-filter="{{ . | urlize }}">{{ . }}</button>
         {{ end }}
       </div>

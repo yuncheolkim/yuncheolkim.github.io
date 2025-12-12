@@ -2,25 +2,21 @@
 title = "截图工具"
 summary = "常用截图与贴图工具合集"
 tags = ["截图", "工具", "Productivity"]
-category = "Screenshot"
+category = "截图"
 
 [[links]]
 name = "Snipaste"
 url = "https://www.snipaste.com"
 logo = "https://www.snipaste.com/img/logo.svg"
 desc = "Windows/macOS 轻量截图与贴图"
+tags = ["截图"]
 
 [[links]]
 name = "ShareX"
 url = "https://getsharex.com"
 desc = "Windows 开源截图、录屏与上传自动化"
 tags = ["Open Source", "Free"]
-
-[[links]]
-name = "CleanShot X"
-url = "https://cleanshot.com"
-desc = "macOS 截图录屏标注，一体化工具"
-tags = ["Paid"]
+logo = "https://getsharex.com/favicon.ico"
 
 [[links]]
 name = "Greenshot"
