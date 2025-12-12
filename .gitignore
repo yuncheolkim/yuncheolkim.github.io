@@ -1,0 +1,8 @@
+public/
+.hugo_build.lock
+.DS_Store
+resources/_gen/
+.hugo_cache/
+hugo_cache/
+hugo_stats.json
+assets/jsconfig.json
