@@ -10,15 +10,26 @@
       {{ range . }}
         {{ $link := . }}
         <a class="link-card" href="{{ $link.url }}" target="_blank" rel="noopener">
-          <span class="card__logo">
-            {{ with $link.logo }}
-              <img src="{{ . }}" alt="{{ $link.name }} logo" loading="lazy">
-            {{ else }}
-              <span class="logo-fallback">{{ substr $link.name 0 1 }}</span>
-            {{ end }}
-          </span>
-          <div class="link-card__title">{{ $link.name }}</div>
+          <div class="link-card__header">
+            <span class="card__logo">
+              {{ with $link.logo }}
+                <img src="{{ . }}" alt="{{ $link.name }} logo" loading="lazy">
+              {{ else }}
+                <span class="logo-fallback">{{ substr $link.name 0 1 }}</span>
+              {{ end }}
+            </span>
+            <div class="link-card__title">{{ $link.name }}</div>
+          </div>
           {{ with $link.desc }}<div class="link-card__desc">{{ . }}</div>{{ end }}
+          <div class="link-card__spacer"></div>
+          {{ with $link.tags }}
+            <div class="tag-row">
+              {{ range first 4 . }}
+                <span class="tag-badge">{{ . }}</span>
+              {{ end }}
+              {{ if gt (len .) 4 }}<span class="tag-badge tag-badge--muted">+{{ sub (len .) 4 }}</span>{{ end }}
+            </div>
+          {{ end }}
         </a>
       {{ end }}
     </div>

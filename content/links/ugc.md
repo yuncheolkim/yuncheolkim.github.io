@@ -9,7 +9,7 @@ sort_weight = 2
 name = "bilibili"
 url = "https://www.bilibili.com/"
 logo = "https://www.bilibili.com/favicon.ico"
-desc = "bilibili"
+desc = "B站"
 tags = ["UGC","视频"]
 
 [[links]]
