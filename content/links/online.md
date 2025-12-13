@@ -2,7 +2,7 @@
 title = "在线工具"
 summary = "在线工具"
 tags = ["在线", "工具"]
-category = "在线"
+category = "在线工具"
 sort_weight = 2
 
 [[links]]
