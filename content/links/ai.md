@@ -12,6 +12,41 @@ desc = "AI 对话与生成"
 tags = ["通用"]
 logo = "https://chat.openai.com/favicon.ico"
 
+[[links]]
+name = "Gemini"
+url = "https://gemini.google.com"
+desc = "AI 对话与生成"
+tags = ["通用"]
+logo = "https://gemini.google.com/favicon.ico"
+
+[[links]]
+name = "Claude"
+url = "https://claude.ai"
+desc = "AI 对话与生成"
+tags = ["编程"]
+logo = "https://claude.ai/favicon.ico"
+
+[[links]]
+name = "豆包"
+url = "https://www.doubao.com/chat/"
+desc = "AI 对话与生成"
+tags = ["通用"]
+logo = "https://lf-flow-web-cdn.doubao.com/obj/flow-doubao/doubao/chat/static/image/logo-icon-white-bg.72df0b1a.png"
+
+[[links]]
+name = "cursor"
+url = "https://cursor.com"
+desc = "AI 对话与生成"
+tags = ["编程"]
+logo = "https://cursor.com/favicon.ico"
+
+[[links]]
+name = "DeepSeek"
+url = "https://chat.deepseek.com"
+desc = "AI 对话与生成"
+tags = ["通用"]
+logo = "https://deepseek.com/favicon.ico"
+
 
 [[links]]
 name = "banana"

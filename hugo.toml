@@ -13,10 +13,10 @@ canonifyURLs = true
       block = true
       title = true
 
-# [[menu.main]]
-# name = "导航"
-# url = "/links/"
-# weight = 1
+[[menu.main]]
+name = "导航"
+url = "/links/"
+weight = 1
 
 [[menu.main]]
 name = "文章"
