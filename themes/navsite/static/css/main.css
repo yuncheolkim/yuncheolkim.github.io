@@ -80,11 +80,21 @@ a {
 }
 
 .site-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   text-decoration: none;
   color: var(--text);
   font-weight: 800;
   letter-spacing: 0.3px;
   font-size: 1.05rem;
+}
+
+.site-header__logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .site-header__title {
