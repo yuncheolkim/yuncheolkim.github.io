@@ -30,7 +30,7 @@ logo = "https://claude.ai/favicon.ico"
 name = "豆包"
 url = "https://www.doubao.com/chat/"
 desc = "AI 对话与生成"
-tags = ["通用"]
+tags = ["通用","cn"]
 logo = "https://lf-flow-web-cdn.doubao.com/obj/flow-doubao/doubao/chat/static/image/logo-icon-white-bg.72df0b1a.png"
 
 [[links]]
@@ -44,7 +44,7 @@ logo = "https://cursor.com/favicon.ico"
 name = "DeepSeek"
 url = "https://chat.deepseek.com"
 desc = "AI 对话与生成"
-tags = ["通用"]
+tags = ["通用","cn"]
 logo = "https://deepseek.com/favicon.ico"
 
 
@@ -68,6 +68,71 @@ url = "https://sora.chatgpt.com/"
 desc = "视频生成"
 tags = ["视频","图片"]
 logo = "https://sora.chatgpt.com/favicon.ico"
+
+[[links]]
+name = "微软图片生成器"
+url = "https://designer.microsoft.com/image-creator"
+desc = "Microsoft Image Creator, 在线图片生成"
+tags = ["图片","微软"]
+logo = "https://designer.microsoft.com/favicon.ico"
+
+[[links]]
+name = "Midjourney"
+url = "https://www.midjourney.com/"
+desc = "Midjourney, 在线图片生成"
+tags = ["图片"]
+logo = "https://www.midjourney.com/favicon.ico"
+
+[[links]]
+name = "Scenario 3D"
+url = "https://app.scenario.com/"
+desc = "Scenario 3D, 在线3D模型生成"
+tags = ["3D模型"]
+logo = "https://app.scenario.com/favicon.ico"
+
+[[links]]
+name = "Tripo3D"
+url = "https://www.tripo3d.ai/zh"
+desc = "Tripo3D, 在线3D模型生成"
+tags = ["3D模型","cn","游戏"]
+logo = "https://www.tripo3d.ai/favicon.ico"
+
+[[links]]
+name = "LuvVoice 文字转语音"
+url = "https://luvvoice.com/zh"
+desc = "LuvVoice, 在线文字转语音"
+tags = ["语音","文字转语音"]
+logo = "https://luvvoice.com/favicon.ico"
+
+[[links]]
+name = "TTSMaker 文字转语音"
+url = "https://ttsmaker.cn/"
+desc = "TTSMaker, 在线文字转语音"
+tags = ["语音","文字转语音"]
+logo = "https://ttsmaker.cn/favicon.ico"
+
+
+[[links]]
+name = "Clipchamp"
+url = "https://clipchamp.com/"
+desc = "Clipchamp, 在线视频编辑"
+tags = ["视频","编辑","微软"]
+logo = "https://clipchamp.com/favicon.ico"
+
+
+[[links]]
+name = "Kimi"
+url = "https://www.kimi.com/"
+desc = "Kimi, 在线AI对话"
+tags = ["AI","通用","cn"]
+logo = "https://www.kimi.com/favicon/favicon.ico"
+
+[[links]]
+name = "即梦AI"
+url = "https://jimeng.jianying.com/ai-tool/generate"
+desc = "即梦AI, 在线图片、视频生成"
+tags = ["AI","cn","图片","视频"]
+logo = "https://jimeng.jianying.com/favicon.ico"
 
 [[links]]
 name = "Runway"

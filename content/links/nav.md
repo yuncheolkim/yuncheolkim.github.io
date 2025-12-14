@@ -17,6 +17,12 @@ url = "https://gohugo.io/documentation/"
 desc = "Hugo 官方文档"
 logo = "https://gohugo.io/favicon.ico"
 
+[[links]]
+name = "在线代码搜索"
+url = "https://sourcegraph.com/search"
+desc = "在线代码片段搜索"
+tags = ["编程","搜索"]
+logo = "https://sourcegraph.com/icon.png?icon.8128ee70.png"
 
 
 +++
