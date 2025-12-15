@@ -1,8 +1,11 @@
 {{ define "main" }}
 {{ $allPosts := (where .Site.RegularPages "Section" "posts").ByDate.Reverse }}
 
-{{/* 计算阅读时间 */}}
-{{ $wordCount := .WordCount }}
+{{/* 计算字数和阅读时间（中文按字符数统计） */}}
+{{ $content := .Plain }}
+{{ $content = replaceRE "https?://[^\\s\\)\\]]*" "" $content }}
+{{ $content = replaceRE "[\\s\\n\\r\\t]+" "" $content }}
+{{ $wordCount := strings.RuneCount $content }}
 {{ $readingTime := div $wordCount 300 }}
 {{ if lt $readingTime 1 }}{{ $readingTime = 1 }}{{ end }}
 
