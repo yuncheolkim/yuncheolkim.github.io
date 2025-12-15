@@ -4,6 +4,33 @@ title = '骑驴找马-人生导航'
 theme = "navsite"
 canonifyURLs = true
 
+# SEO 配置
+[params]
+  description = "骑驴找马 - 您的人生导航站，提供实用工具导航、生活经验分享、AI工具推荐等优质内容"
+  author = "yuncheol kim"
+  keywords = "导航站,工具导航,生活经验,AI工具,实用技巧"
+  images = ["/images/logo.png"]
+  
+  # 社交媒体
+  [params.social]
+    twitter = ""
+    github = ""
+
+# 开启 Sitemap
+enableRobotsTXT = true
+
+[sitemap]
+  changefreq = "weekly"
+  filename = "sitemap.xml"
+  priority = 0.5
+
+# 输出格式
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  section = ["HTML", "RSS"]
+  taxonomy = ["HTML", "RSS"]
+  term = ["HTML", "RSS"]
+
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]

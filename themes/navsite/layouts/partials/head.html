@@ -1,15 +1,132 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  
+  <!-- 基本 SEO -->
   <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
-  {{ with .Params.summary }}<meta name="description" content="{{ . }}">{{ else }}{{ with .Site.Params.description }}<meta name="description" content="{{ . }}">{{ end }}{{ end }}
+  
+  {{/* Description: 优先使用页面 summary，其次使用页面描述，最后使用站点描述 */}}
+  {{ $description := .Site.Params.description }}
+  {{ with .Params.summary }}{{ $description = . }}{{ end }}
+  {{ with .Params.description }}{{ $description = . }}{{ end }}
+  {{ with $description }}<meta name="description" content="{{ . }}">{{ end }}
+  
+  {{/* Keywords */}}
+  {{ $keywords := .Site.Params.keywords }}
+  {{ with .Params.tags }}{{ $keywords = delimit . ", " }}{{ end }}
+  {{ with .Params.keywords }}{{ $keywords = . }}{{ end }}
+  {{ with $keywords }}<meta name="keywords" content="{{ . }}">{{ end }}
+  
+  <!-- 作者信息 -->
+  {{ with .Params.author }}<meta name="author" content="{{ . }}">{{ else }}{{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}{{ end }}
+  
+  <!-- Canonical URL -->
   <link rel="canonical" href="{{ .Permalink }}">
+  
+  <!-- Robots -->
+  {{ if .Params.noindex }}
+  <meta name="robots" content="noindex, nofollow">
+  {{ else }}
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  {{ end }}
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+  {{ with $description }}<meta property="og:description" content="{{ . }}">{{ end }}
+  <meta property="og:site_name" content="{{ .Site.Title }}">
+  <meta property="og:locale" content="zh_CN">
+  {{ with .Params.image }}
+  <meta property="og:image" content="{{ . | absURL }}">
+  {{ else }}
+  {{ with .Site.Params.images }}
+  <meta property="og:image" content="{{ index . 0 | absURL }}">
+  {{ end }}
+  {{ end }}
+  {{ if .IsPage }}
+  <meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+  {{ with .Lastmod }}<meta property="article:modified_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}">{{ end }}
+  {{ with .Params.author }}<meta property="article:author" content="{{ . }}">{{ end }}
+  {{ with .Params.categories }}{{ range . }}<meta property="article:section" content="{{ . }}">{{ end }}{{ end }}
+  {{ with .Params.tags }}{{ range . }}<meta property="article:tag" content="{{ . }}">{{ end }}{{ end }}
+  {{ end }}
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+  {{ with $description }}<meta name="twitter:description" content="{{ . }}">{{ end }}
+  {{ with .Params.image }}
+  <meta name="twitter:image" content="{{ . | absURL }}">
+  {{ else }}
+  {{ with .Site.Params.images }}
+  <meta name="twitter:image" content="{{ index . 0 | absURL }}">
+  {{ end }}
+  {{ end }}
+  
+  <!-- JSON-LD 结构化数据 -->
+  {{ if .IsHome }}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "{{ .Site.Title }}",
+    "url": "{{ .Site.BaseURL }}",
+    "description": "{{ .Site.Params.description }}",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "{{ .Site.BaseURL }}search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  {{ else if .IsPage }}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{ .Title }}",
+    "description": "{{ with $description }}{{ . }}{{ end }}",
+    "url": "{{ .Permalink }}",
+    "datePublished": "{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}",
+    {{ with .Lastmod }}"dateModified": "{{ .Format "2006-01-02T15:04:05Z07:00" }}",{{ end }}
+    "author": {
+      "@type": "Person",
+      "name": "{{ with .Params.author }}{{ . }}{{ else }}{{ .Site.Params.author }}{{ end }}"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "{{ .Site.Title }}",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "{{ "images/logo.png" | absURL }}"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "{{ .Permalink }}"
+    }
+  }
+  </script>
+  {{ end }}
+  
+  <!-- Favicon -->
   {{ with .Site.Params.favicon }}<link rel="icon" href="{{ . | relURL }}">{{ else }}<link rel="icon" href="{{ "favicon.png" | relURL }}">{{ end }}
+  <link rel="apple-touch-icon" href="{{ "favicon.png" | relURL }}">
+  
+  <!-- RSS -->
+  {{ with .OutputFormats.Get "RSS" }}
+  <link rel="alternate" type="application/rss+xml" title="{{ $.Site.Title }}" href="{{ .Permalink }}">
+  {{ end }}
+  
   <!-- 阅读字体：霞鹜文楷 + 思源宋体 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet">
   <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
+  
+  <!-- KaTeX 数学公式 -->
   {{ if or .Params.math .Params.params.math .Site.Params.math }}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
@@ -28,6 +145,8 @@
     });
   </script>
   {{ end }}
+  
+  <!-- 统计 -->
   <script defer src="https://cloud.umami.is/script.js" data-website-id="9c89a332-4ddb-4794-ade3-f14e7201872a"></script>
+  
   {{ block "extra_head" . }}{{ end }}
-
