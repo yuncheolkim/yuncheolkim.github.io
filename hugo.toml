@@ -12,6 +12,10 @@ canonifyURLs = true
     [markup.goldmark.extensions.attribute]
       block = true
       title = true
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 4
+    ordered = false
 
 [[menu.main]]
 name = "导航"

@@ -1,109 +1,166 @@
 {{ define "main" }}
 {{ $allPosts := (where .Site.RegularPages "Section" "posts").ByDate.Reverse }}
-{{ $recentPosts := first 8 $allPosts }}
 
-{{/* 从 posts 文章中收集分类和标签 */}}
-{{ $scratch := newScratch }}
-{{ range $allPosts }}
-  {{ with .Params.categories }}
-    {{ range . }}
-      {{ $scratch.Add "categories" (slice .) }}
-    {{ end }}
-  {{ end }}
-  {{ with .Params.tags }}
-    {{ range . }}
-      {{ $scratch.Add "tags" (slice .) }}
-    {{ end }}
+{{/* 计算阅读时间 */}}
+{{ $wordCount := .WordCount }}
+{{ $readingTime := div $wordCount 300 }}
+{{ if lt $readingTime 1 }}{{ $readingTime = 1 }}{{ end }}
+
+{{/* 获取上一篇和下一篇文章 */}}
+{{ $currentIndex := 0 }}
+{{ range $index, $post := $allPosts }}
+  {{ if eq $post.RelPermalink $.RelPermalink }}
+    {{ $currentIndex = $index }}
   {{ end }}
 {{ end }}
-{{ $postCategories := uniq ($scratch.Get "categories") }}
-{{ $postTags := uniq ($scratch.Get "tags") }}
+{{ $prevPost := index $allPosts (sub $currentIndex 1) }}
+{{ $nextPost := index $allPosts (add $currentIndex 1) }}
 
-<div class="blog-layout">
-  <aside class="blog-sidebar">
-    {{/* 最新文章区块 */}}
-    <div class="panel sidebar-section">
-      <h2 class="sidebar-section__title">📄 最新文章</h2>
-      <nav class="blog-sidebar__list">
-        {{ range $recentPosts }}
-          <a class="blog-sidebar__item {{ if eq .RelPermalink $.RelPermalink }}is-active{{ end }}" href="{{ .RelPermalink }}">
-            <div class="blog-sidebar__item-title">{{ .Title }}</div>
-            <div class="blog-sidebar__item-meta">
-              <time>{{ .Date.Format "2006-01-02" }}</time>
-            </div>
-          </a>
-        {{ end }}
+<!-- 阅读进度条 -->
+<div class="reading-progress" id="reading-progress"></div>
+
+<div class="reader-layout">
+  <!-- 左侧目录 -->
+  <aside class="toc-sidebar" id="toc-sidebar">
+    <div class="toc-container">
+      <h3 class="toc-title">📑 目录</h3>
+      <nav class="toc-nav" id="toc-nav">
+        {{ .TableOfContents }}
       </nav>
-      <div class="blog-sidebar__footer">
-        <a class="ghost-link" href="{{ "/posts/" | relURL }}">查看全部 ({{ len $allPosts }})</a>
+      <div class="toc-footer">
+        <a class="ghost-link" href="{{ "/posts/" | relURL }}">← 返回文章列表</a>
       </div>
     </div>
-
-    {{/* 分类区块 */}}
-    {{ if $postCategories }}
-    <div class="panel sidebar-section">
-      <h2 class="sidebar-section__title">📁 分类</h2>
-      <nav class="category-list">
-        <a class="category-list__item" href="{{ "/posts/" | relURL }}">
-          <span class="category-list__name">全部</span>
-          <span class="category-list__count">{{ len $allPosts }}</span>
-        </a>
-        {{ range $postCategories }}
-          {{ $count := len (where $allPosts ".Params.categories" "intersect" (slice .)) }}
-          <a class="category-list__item {{ if in $.Params.categories . }}is-active{{ end }}" href="{{ "/posts/" | relURL }}?category={{ urlize . }}">
-            <span class="category-list__name">{{ . }}</span>
-            <span class="category-list__count">{{ $count }}</span>
-          </a>
-        {{ end }}
-      </nav>
-    </div>
-    {{ end }}
-
-    {{/* 标签区块 */}}
-    {{ if $postTags }}
-    <div class="panel sidebar-section">
-      <h2 class="sidebar-section__title">🏷️ 标签</h2>
-      <div class="filter-cloud">
-        {{ range $postTags }}
-          {{ $count := len (where $allPosts ".Params.tags" "intersect" (slice .)) }}
-          <a class="filter-tag filter-tag--tag {{ if in $.Params.tags . }}is-active{{ end }}" href="{{ "/posts/" | relURL }}?tag={{ urlize . }}">
-            <span class="filter-tag__name">{{ . }}</span>
-            <span class="filter-tag__count">{{ $count }}</span>
-          </a>
-        {{ end }}
-      </div>
-    </div>
-    {{ end }}
   </aside>
 
-  <main class="blog-content">
-    <article class="panel blog-post">
-      <header class="blog-post__header">
-        <h1 class="blog-post__title">{{ .Title }}</h1>
-        <div class="blog-post__meta">
-          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+  <!-- 主内容区 -->
+  <main class="reader-content">
+    <article class="reader-article">
+      <!-- 文章头部 -->
+      <header class="reader-header">
+        <div class="reader-header__meta">
           {{ with .Params.categories }}
-            <span class="blog-post__categories">
-              {{ range . }}<a class="category-badge" href="{{ (printf "/categories/%s/" (urlize .)) | relURL }}">{{ . }}</a>{{ end }}
-            </span>
-          {{ end }}
-          {{ with .Params.tags }}
-            <span class="blog-post__tags">
-              {{ range . }}<a class="tag-badge" href="{{ (printf "/tags/%s/" (urlize .)) | relURL }}">{{ . }}</a>{{ end }}
-            </span>
+            {{ range . }}<a class="reader-category" href="{{ "/posts/" | relURL }}?category={{ urlize . }}">{{ . }}</a>{{ end }}
           {{ end }}
         </div>
-        {{ with .Params.summary }}<p class="blog-post__subtitle">{{ . }}</p>{{ end }}
+        <h1 class="reader-header__title">{{ .Title }}</h1>
+        {{ with .Params.summary }}<p class="reader-header__summary">{{ . }}</p>{{ end }}
+        <div class="reader-header__info">
+          <span class="reader-info-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            {{ .Date.Format "2006年01月02日" }}
+          </span>
+          <span class="reader-info-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            约 {{ $readingTime }} 分钟阅读
+          </span>
+          <span class="reader-info-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            {{ $wordCount }} 字
+          </span>
+        </div>
+        {{ with .Params.tags }}
+          <div class="reader-header__tags">
+            {{ range . }}<a class="tag-badge" href="{{ "/posts/" | relURL }}?tag={{ urlize . }}">{{ . }}</a>{{ end }}
+          </div>
+        {{ end }}
       </header>
 
-      <div class="prose">
-        {{ .Content }}
+      <!-- 文章内容 -->
+      <div class="reader-body">
+        <div class="prose" id="article-content">
+          {{ .Content }}
+        </div>
       </div>
 
-      <footer class="blog-post__footer">
-        <a class="ghost-link" href="{{ "/posts/" | relURL }}">← 返回博客</a>
+      <!-- 文章底部 -->
+      <footer class="reader-footer">
+        <!-- 上下篇导航 -->
+        <nav class="article-nav">
+          {{ if and $prevPost (gt $currentIndex 0) }}
+            <a class="article-nav__item article-nav__prev" href="{{ $prevPost.RelPermalink }}">
+              <span class="article-nav__label">上一篇</span>
+              <span class="article-nav__title">{{ $prevPost.Title }}</span>
+            </a>
+          {{ else }}
+            <div class="article-nav__item article-nav__prev article-nav__empty">
+              <span class="article-nav__label">已是最新</span>
+            </div>
+          {{ end }}
+          
+          {{ if and $nextPost (lt $currentIndex (sub (len $allPosts) 1)) }}
+            <a class="article-nav__item article-nav__next" href="{{ $nextPost.RelPermalink }}">
+              <span class="article-nav__label">下一篇</span>
+              <span class="article-nav__title">{{ $nextPost.Title }}</span>
+            </a>
+          {{ else }}
+            <div class="article-nav__item article-nav__next article-nav__empty">
+              <span class="article-nav__label">已是最后</span>
+            </div>
+          {{ end }}
+        </nav>
+
+        <div class="reader-footer__actions">
+          <a class="reader-btn" href="{{ "/posts/" | relURL }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            返回文章列表
+          </a>
+          <button class="reader-btn" id="scroll-top-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+            回到顶部
+          </button>
+        </div>
       </footer>
     </article>
   </main>
 </div>
+
+<script>
+(function() {
+  // 阅读进度条
+  const progressBar = document.getElementById('reading-progress');
+  const article = document.getElementById('article-content');
+  
+  function updateProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / docHeight) * 100;
+    progressBar.style.width = progress + '%';
+  }
+  
+  window.addEventListener('scroll', updateProgress);
+  updateProgress();
+  
+  // 回到顶部
+  const scrollTopBtn = document.getElementById('scroll-top-btn');
+  if (scrollTopBtn) {
+    scrollTopBtn.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+  
+  // 目录高亮当前章节
+  const tocLinks = document.querySelectorAll('#toc-nav a');
+  const headings = document.querySelectorAll('.prose h2, .prose h3');
+  
+  function updateTocHighlight() {
+    let currentHeading = null;
+    headings.forEach(heading => {
+      if (heading.getBoundingClientRect().top <= 100) {
+        currentHeading = heading;
+      }
+    });
+    
+    tocLinks.forEach(link => {
+      link.classList.remove('is-active');
+      if (currentHeading && link.getAttribute('href') === '#' + currentHeading.id) {
+        link.classList.add('is-active');
+      }
+    });
+  }
+  
+  window.addEventListener('scroll', updateTocHighlight);
+  updateTocHighlight();
+})();
+</script>
 {{ end }}
