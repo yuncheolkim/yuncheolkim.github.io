@@ -747,9 +747,7 @@ a {
   color: var(--reader-text, rgba(245, 247, 255, 0.92));
   line-height: 2;
   font-size: 1.05rem;
-  font-family: "LXGW WenKai", "Noto Serif SC", "Source Han Serif SC", 
-    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", 
-    Georgia, "Times New Roman", serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   letter-spacing: 0.02em;
   text-align: justify;
 }
@@ -802,7 +800,6 @@ a {
 .prose h3 {
   margin-top: 28px;
   margin-bottom: 12px;
-  font-family: "LXGW WenKai", "Noto Serif SC", "PingFang SC", sans-serif;
   font-weight: 600;
   letter-spacing: 0.03em;
 }
@@ -1598,7 +1595,6 @@ a {
   font-size: 2rem;
   font-weight: 800;
   line-height: 1.3;
-  font-family: "LXGW WenKai", "Noto Serif SC", sans-serif;
   letter-spacing: 0.02em;
   color: var(--reader-text);
 }
