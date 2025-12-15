@@ -4,6 +4,11 @@
   {{ with .Params.summary }}<meta name="description" content="{{ . }}">{{ else }}{{ with .Site.Params.description }}<meta name="description" content="{{ . }}">{{ end }}{{ end }}
   <link rel="canonical" href="{{ .Permalink }}">
   {{ with .Site.Params.favicon }}<link rel="icon" href="{{ . | relURL }}">{{ else }}<link rel="icon" href="{{ "favicon.png" | relURL }}">{{ end }}
+  <!-- 阅读字体：霞鹜文楷 + 思源宋体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet">
   <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
   {{ if or .Params.math .Params.params.math .Site.Params.math }}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">

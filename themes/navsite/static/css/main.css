@@ -745,18 +745,47 @@ a {
 
 .prose {
   color: rgba(245, 247, 255, 0.92);
-  line-height: 1.8;
-  font-size: 1.02rem;
+  line-height: 2;
+  font-size: 1.05rem;
+  font-family: "LXGW WenKai", "Noto Serif SC", "Source Han Serif SC", 
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", 
+    Georgia, "Times New Roman", serif;
+  letter-spacing: 0.02em;
+  text-align: justify;
 }
 
 .prose h2,
 .prose h3 {
-  margin-top: 26px;
-  margin-bottom: 10px;
+  margin-top: 28px;
+  margin-bottom: 12px;
+  font-family: "LXGW WenKai", "Noto Serif SC", "PingFang SC", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.prose h2 {
+  font-size: 1.4rem;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.prose h3 {
+  font-size: 1.2rem;
 }
 
 .prose p {
-  margin: 0 0 14px;
+  margin: 0 0 18px;
+  text-indent: 0;
+}
+
+.prose li {
+  margin-bottom: 8px;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.5em;
+  margin-bottom: 18px;
 }
 
 .prose a {
