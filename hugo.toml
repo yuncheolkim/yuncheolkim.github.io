@@ -10,6 +10,7 @@ canonifyURLs = true
   author = "yuncheol kim"
   keywords = "导航站,工具导航,生活经验,AI工具,实用技巧"
   images = ["/images/logo.png"]
+  email = "huoying1245@163.com"  # 请修改为你的邮箱地址
   
   # 社交媒体
   [params.social]
