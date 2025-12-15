@@ -141,8 +141,12 @@ desc = "是一个面向创作者的 AI 视觉创作平台，主打视频生成�
 tags = ["Paid" ,"视频","图片"]
 logo = "https://runwayml.com/icon.png?icon.8128ee70.png"
 
-
-
+[[links]]
+name = "LovArt"
+url = "https://www.lovart.ai/zh/home"
+desc = "LovArt, 在线图片、视频生成"
+tags = ["Paid","图片","视频","在线编辑"]
+logo = "https://www.lovart.ai/favicon.ico"
 
 [[links]]
 name = "FutureTools"
@@ -150,6 +154,8 @@ url = "https://www.futuretools.io/"
 desc = "AI 工具集合与导航"
 tags = ["AI", "Aggregators"]
 logo = "https://cdn.prod.website-files.com/639910cce4b41d2a9b3e96fb/6407c9f2d378177ef3675436_favicon.png"
+
+
 
 +++
 
