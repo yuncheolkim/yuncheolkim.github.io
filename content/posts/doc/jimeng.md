@@ -1,5 +1,5 @@
 +++
-title = "即梦AI文档"
+title = "即梦AI文档提示词手册"
 date = 2025-12-14T12:00:00+08:00
 draft = false
 slug = "jimeng-ai-document"

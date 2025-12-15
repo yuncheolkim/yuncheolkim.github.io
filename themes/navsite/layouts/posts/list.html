@@ -1,6 +1,4 @@
 {{ define "main" }}
-{{ $p := .Paginate .Pages 10 }}
-{{ $firstPost := index $p.Pages 0 }}
 {{ $allPosts := (where $.Site.RegularPages "Section" "posts").ByDate.Reverse }}
 
 {{/* 从 posts 文章中收集分类 */}}
@@ -27,7 +25,7 @@
       <h2 class="sidebar-section__title">📄 最新文章</h2>
       <nav class="blog-sidebar__list">
         {{ range first 8 $allPosts }}
-          <a class="blog-sidebar__item {{ if eq .RelPermalink $firstPost.RelPermalink }}is-active{{ end }}" href="{{ .RelPermalink }}">
+          <a class="blog-sidebar__item" href="{{ .RelPermalink }}">
             <div class="blog-sidebar__item-title">{{ .Title }}</div>
             <div class="blog-sidebar__item-meta">
               <time>{{ .Date.Format "2006-01-02" }}</time>
@@ -45,14 +43,18 @@
     {{/* 分类区块 */}}
     {{ if $postCategories }}
     <div class="panel sidebar-section">
-      <h2 class="sidebar-section__title">📁 分类</h2>
-      <nav class="category-list">
+      <h2 class="sidebar-section__title">📁 分类 <button class="filter-reset" id="reset-category" style="display:none;">清除</button></h2>
+      <nav class="category-list" id="category-filter">
+        <button class="category-list__item is-active" data-category="all">
+          <span class="category-list__name">全部</span>
+          <span class="category-list__count">{{ len $allPosts }}</span>
+        </button>
         {{ range $postCategories }}
           {{ $count := len (where $allPosts ".Params.categories" "intersect" (slice .)) }}
-          <a class="category-list__item" href="{{ (printf "/categories/%s/" (urlize .)) | relURL }}">
+          <button class="category-list__item" data-category="{{ . }}">
             <span class="category-list__name">{{ . }}</span>
             <span class="category-list__count">{{ $count }}</span>
-          </a>
+          </button>
         {{ end }}
       </nav>
     </div>
@@ -61,61 +63,172 @@
     {{/* 标签区块 */}}
     {{ if $postTags }}
     <div class="panel sidebar-section">
-      <h2 class="sidebar-section__title">🏷️ 标签</h2>
-      <div class="filter-cloud">
+      <h2 class="sidebar-section__title">🏷️ 标签 <button class="filter-reset" id="reset-tags" style="display:none;">清除</button></h2>
+      <div class="filter-cloud" id="tag-filter">
         {{ range $postTags }}
           {{ $count := len (where $allPosts ".Params.tags" "intersect" (slice .)) }}
-          <a class="filter-tag filter-tag--tag" href="{{ (printf "/tags/%s/" (urlize .)) | relURL }}">
+          <button class="filter-tag filter-tag--tag" data-tag="{{ . }}">
             <span class="filter-tag__name">{{ . }}</span>
             <span class="filter-tag__count">{{ $count }}</span>
-          </a>
+          </button>
         {{ end }}
       </div>
     </div>
     {{ end }}
-
-    {{/* 分页 */}}
-    {{ if gt $p.TotalPages 1 }}
-      <div class="panel sidebar-section">
-        <div class="blog-sidebar__pagination">
-          {{ if $p.HasPrev }}<a class="ghost-link" href="{{ $p.Prev.URL }}">« 上一页</a>{{ end }}
-          <span class="blog-pagination__info">第 {{ $p.PageNumber }} / {{ $p.TotalPages }} 页</span>
-          {{ if $p.HasNext }}<a class="ghost-link" href="{{ $p.Next.URL }}">下一页 »</a>{{ end }}
-        </div>
-      </div>
-    {{ end }}
   </aside>
 
   <main class="blog-content">
-    {{ if $firstPost }}
-      <article class="panel blog-post">
-        <header class="blog-post__header">
-          <h1 class="blog-post__title">{{ $firstPost.Title }}</h1>
-          <div class="blog-post__meta">
-            <time datetime="{{ $firstPost.Date.Format "2006-01-02" }}">{{ $firstPost.Date.Format "2006-01-02" }}</time>
-            {{ with $firstPost.Params.categories }}
-              <span class="blog-post__categories">
-                {{ range . }}<a class="category-badge" href="{{ (printf "/categories/%s/" (urlize .)) | relURL }}">{{ . }}</a>{{ end }}
-              </span>
-            {{ end }}
-            {{ with $firstPost.Params.tags }}
-              <span class="blog-post__tags">
-                {{ range . }}<a class="tag-badge" href="{{ (printf "/tags/%s/" (urlize .)) | relURL }}">{{ . }}</a>{{ end }}
-              </span>
-            {{ end }}
-          </div>
-          {{ with $firstPost.Params.summary }}<p class="blog-post__subtitle">{{ . }}</p>{{ end }}
-        </header>
-
-        <div class="prose">
-          {{ $firstPost.Content }}
-        </div>
-      </article>
-    {{ else }}
-      <div class="panel">
-        <p>暂无文章</p>
+    <div class="panel">
+      <div class="section-title">
+        <h2>📰 <span id="filter-title">全部文章</span></h2>
+        <span id="filter-count" class="filter-count">{{ len $allPosts }} 篇</span>
       </div>
-    {{ end }}
+      
+      {{ if $allPosts }}
+        <div class="article-list" id="article-list">
+          {{ range $allPosts }}
+            <article class="article-card" 
+              data-categories="{{ with .Params.categories }}{{ delimit . "," }}{{ end }}"
+              data-tags="{{ with .Params.tags }}{{ delimit . "," }}{{ end }}">
+              <header class="article-card__header">
+                <h3 class="article-card__title">
+                  <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                </h3>
+                <div class="article-card__meta">
+                  <time datetime="{{ .Date.Format "2006-01-02" }}">📅 {{ .Date.Format "2006-01-02" }}</time>
+                  {{ with .Params.categories }}
+                    <span class="article-card__categories">
+                      {{ range . }}<span class="category-badge">{{ . }}</span>{{ end }}
+                    </span>
+                  {{ end }}
+                </div>
+              </header>
+              
+              {{ with .Params.summary }}
+                <p class="article-card__summary">{{ . }}</p>
+              {{ else }}
+                <p class="article-card__summary">{{ .Summary | plainify | truncate 120 }}</p>
+              {{ end }}
+              
+              {{ with .Params.tags }}
+                <div class="article-card__tags">
+                  {{ range . }}<span class="tag-badge">{{ . }}</span>{{ end }}
+                </div>
+              {{ end }}
+              
+              <a class="article-card__readmore" href="{{ .RelPermalink }}">阅读全文 →</a>
+            </article>
+          {{ end }}
+        </div>
+        
+        <div id="no-results" class="no-results" style="display:none;">
+          <p>😔 没有找到符合条件的文章</p>
+        </div>
+      {{ else }}
+        <p>暂无文章</p>
+      {{ end }}
+    </div>
   </main>
 </div>
+
+<script>
+(function() {
+  let currentCategory = 'all';
+  let selectedTags = new Set();
+  
+  const articles = document.querySelectorAll('.article-card');
+  const categoryButtons = document.querySelectorAll('#category-filter .category-list__item');
+  const tagButtons = document.querySelectorAll('#tag-filter .filter-tag');
+  const filterTitle = document.getElementById('filter-title');
+  const filterCount = document.getElementById('filter-count');
+  const noResults = document.getElementById('no-results');
+  const articleList = document.getElementById('article-list');
+  const resetTagsBtn = document.getElementById('reset-tags');
+  
+  function filterArticles() {
+    let visibleCount = 0;
+    
+    articles.forEach(article => {
+      const articleCategories = article.dataset.categories ? article.dataset.categories.split(',') : [];
+      const articleTags = article.dataset.tags ? article.dataset.tags.split(',') : [];
+      
+      // 检查分类
+      const categoryMatch = currentCategory === 'all' || articleCategories.includes(currentCategory);
+      
+      // 检查标签（如果选中了标签，文章必须包含所有选中的标签）
+      let tagMatch = true;
+      if (selectedTags.size > 0) {
+        tagMatch = [...selectedTags].every(tag => articleTags.includes(tag));
+      }
+      
+      if (categoryMatch && tagMatch) {
+        article.style.display = '';
+        visibleCount++;
+      } else {
+        article.style.display = 'none';
+      }
+    });
+    
+    // 更新标题和计数
+    let titleParts = [];
+    if (currentCategory !== 'all') {
+      titleParts.push(currentCategory);
+    }
+    if (selectedTags.size > 0) {
+      titleParts.push([...selectedTags].join(' + '));
+    }
+    
+    filterTitle.textContent = titleParts.length > 0 ? titleParts.join(' / ') : '全部文章';
+    filterCount.textContent = visibleCount + ' 篇';
+    
+    // 显示/隐藏无结果提示
+    if (visibleCount === 0) {
+      noResults.style.display = '';
+      articleList.style.display = 'none';
+    } else {
+      noResults.style.display = 'none';
+      articleList.style.display = '';
+    }
+    
+    // 显示/隐藏清除标签按钮
+    if (resetTagsBtn) {
+      resetTagsBtn.style.display = selectedTags.size > 0 ? '' : 'none';
+    }
+  }
+  
+  // 分类点击事件
+  categoryButtons.forEach(btn => {
+    btn.addEventListener('click', function() {
+      categoryButtons.forEach(b => b.classList.remove('is-active'));
+      this.classList.add('is-active');
+      currentCategory = this.dataset.category;
+      filterArticles();
+    });
+  });
+  
+  // 标签点击事件（多选）
+  tagButtons.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const tag = this.dataset.tag;
+      if (selectedTags.has(tag)) {
+        selectedTags.delete(tag);
+        this.classList.remove('is-active');
+      } else {
+        selectedTags.add(tag);
+        this.classList.add('is-active');
+      }
+      filterArticles();
+    });
+  });
+  
+  // 清除标签按钮
+  if (resetTagsBtn) {
+    resetTagsBtn.addEventListener('click', function() {
+      selectedTags.clear();
+      tagButtons.forEach(btn => btn.classList.remove('is-active'));
+      filterArticles();
+    });
+  }
+})();
+</script>
 {{ end }}
