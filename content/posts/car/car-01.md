@@ -6,7 +6,7 @@ slug = "car-01"
 author = "yuncheol kim"
 categories = ["汽车"]
 tags = ["汽车","事故"]
-summary = "1:出了事故不要害怕,立刻打110和保险公司。对方伤重请直接播120,你留在现场等交警。"
+summary = "不垫付、 不探望 、不调解，没有钱。"
 
 +++
 

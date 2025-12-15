@@ -44,9 +44,13 @@
     <div class="panel sidebar-section">
       <h2 class="sidebar-section__title">📁 分类</h2>
       <nav class="category-list">
+        <a class="category-list__item" href="{{ "/posts/" | relURL }}">
+          <span class="category-list__name">全部</span>
+          <span class="category-list__count">{{ len $allPosts }}</span>
+        </a>
         {{ range $postCategories }}
           {{ $count := len (where $allPosts ".Params.categories" "intersect" (slice .)) }}
-          <a class="category-list__item" href="{{ (printf "/categories/%s/" (urlize .)) | relURL }}">
+          <a class="category-list__item {{ if in $.Params.categories . }}is-active{{ end }}" href="{{ "/posts/" | relURL }}?category={{ urlize . }}">
             <span class="category-list__name">{{ . }}</span>
             <span class="category-list__count">{{ $count }}</span>
           </a>
@@ -62,7 +66,7 @@
       <div class="filter-cloud">
         {{ range $postTags }}
           {{ $count := len (where $allPosts ".Params.tags" "intersect" (slice .)) }}
-          <a class="filter-tag filter-tag--tag" href="{{ (printf "/tags/%s/" (urlize .)) | relURL }}">
+          <a class="filter-tag filter-tag--tag {{ if in $.Params.tags . }}is-active{{ end }}" href="{{ "/posts/" | relURL }}?tag={{ urlize . }}">
             <span class="filter-tag__name">{{ . }}</span>
             <span class="filter-tag__count">{{ $count }}</span>
           </a>

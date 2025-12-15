@@ -133,8 +133,16 @@
 
 <script>
 (function() {
-  let currentCategory = 'all';
+  // 解析 URL 参数
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlCategory = urlParams.get('category');
+  const urlTag = urlParams.get('tag');
+  
+  let currentCategory = urlCategory || 'all';
   let selectedTags = new Set();
+  if (urlTag) {
+    selectedTags.add(decodeURIComponent(urlTag));
+  }
   
   const articles = document.querySelectorAll('.article-card');
   const categoryButtons = document.querySelectorAll('#category-filter .category-list__item');
@@ -144,6 +152,23 @@
   const noResults = document.getElementById('no-results');
   const articleList = document.getElementById('article-list');
   const resetTagsBtn = document.getElementById('reset-tags');
+  
+  // 根据 URL 参数设置初始状态
+  if (urlCategory) {
+    categoryButtons.forEach(btn => {
+      btn.classList.remove('is-active');
+      if (btn.dataset.category === urlCategory) {
+        btn.classList.add('is-active');
+      }
+    });
+  }
+  if (urlTag) {
+    tagButtons.forEach(btn => {
+      if (btn.dataset.tag === decodeURIComponent(urlTag)) {
+        btn.classList.add('is-active');
+      }
+    });
+  }
   
   function filterArticles() {
     let visibleCount = 0;
@@ -228,6 +253,11 @@
       tagButtons.forEach(btn => btn.classList.remove('is-active'));
       filterArticles();
     });
+  }
+  
+  // 页面加载时应用初始过滤（如果有 URL 参数）
+  if (urlCategory || urlTag) {
+    filterArticles();
   }
 })();
 </script>
