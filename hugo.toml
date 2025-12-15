@@ -1,6 +1,6 @@
 baseURL = 'https://www.qilvzm.com/'
-languageCode = 'en-us'
-title = '骑驴找马'
+languageCode = 'zh-cn'
+title = '骑驴找马-人生导航'
 theme = "navsite"
 canonifyURLs = true
 
