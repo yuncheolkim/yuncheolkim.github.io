@@ -1,11 +1,29 @@
 {{ define "main" }}
-{{ $allPosts := where .Site.RegularPages "Section" "posts" }}
-{{ $recentPosts := first 10 (sort $allPosts "Date" "desc") }}
+{{ $allPosts := (where .Site.RegularPages "Section" "posts").ByDate.Reverse }}
+{{ $recentPosts := first 8 $allPosts }}
+
+{{/* 从 posts 文章中收集分类和标签 */}}
+{{ $scratch := newScratch }}
+{{ range $allPosts }}
+  {{ with .Params.categories }}
+    {{ range . }}
+      {{ $scratch.Add "categories" (slice .) }}
+    {{ end }}
+  {{ end }}
+  {{ with .Params.tags }}
+    {{ range . }}
+      {{ $scratch.Add "tags" (slice .) }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+{{ $postCategories := uniq ($scratch.Get "categories") }}
+{{ $postTags := uniq ($scratch.Get "tags") }}
 
 <div class="blog-layout">
   <aside class="blog-sidebar">
-    <div class="panel">
-      <h2 class="blog-sidebar__title">最近文章</h2>
+    {{/* 最新文章区块 */}}
+    <div class="panel sidebar-section">
+      <h2 class="sidebar-section__title">📄 最新文章</h2>
       <nav class="blog-sidebar__list">
         {{ range $recentPosts }}
           <a class="blog-sidebar__item {{ if eq .RelPermalink $.RelPermalink }}is-active{{ end }}" href="{{ .RelPermalink }}">
@@ -17,9 +35,41 @@
         {{ end }}
       </nav>
       <div class="blog-sidebar__footer">
-        <a class="ghost-link" href="{{ "/posts/" | relURL }}">查看全部</a>
+        <a class="ghost-link" href="{{ "/posts/" | relURL }}">查看全部 ({{ len $allPosts }})</a>
       </div>
     </div>
+
+    {{/* 分类区块 */}}
+    {{ if $postCategories }}
+    <div class="panel sidebar-section">
+      <h2 class="sidebar-section__title">📁 分类</h2>
+      <nav class="category-list">
+        {{ range $postCategories }}
+          {{ $count := len (where $allPosts ".Params.categories" "intersect" (slice .)) }}
+          <a class="category-list__item" href="{{ (printf "/categories/%s/" (urlize .)) | relURL }}">
+            <span class="category-list__name">{{ . }}</span>
+            <span class="category-list__count">{{ $count }}</span>
+          </a>
+        {{ end }}
+      </nav>
+    </div>
+    {{ end }}
+
+    {{/* 标签区块 */}}
+    {{ if $postTags }}
+    <div class="panel sidebar-section">
+      <h2 class="sidebar-section__title">🏷️ 标签</h2>
+      <div class="filter-cloud">
+        {{ range $postTags }}
+          {{ $count := len (where $allPosts ".Params.tags" "intersect" (slice .)) }}
+          <a class="filter-tag filter-tag--tag" href="{{ (printf "/tags/%s/" (urlize .)) | relURL }}">
+            <span class="filter-tag__name">{{ . }}</span>
+            <span class="filter-tag__count">{{ $count }}</span>
+          </a>
+        {{ end }}
+      </div>
+    </div>
+    {{ end }}
   </aside>
 
   <main class="blog-content">
@@ -28,11 +78,11 @@
         <h1 class="blog-post__title">{{ .Title }}</h1>
         <div class="blog-post__meta">
           <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
-            {{ with .Params.categories }}
-              <span class="blog-post__categories">
-                {{ range . }}<a class="tag-badge" href="{{ (printf "/categories/%s/" (urlize .)) | relURL }}">{{ . }}</a>{{ end }}
-              </span>
-            {{ end }}
+          {{ with .Params.categories }}
+            <span class="blog-post__categories">
+              {{ range . }}<a class="category-badge" href="{{ (printf "/categories/%s/" (urlize .)) | relURL }}">{{ . }}</a>{{ end }}
+            </span>
+          {{ end }}
           {{ with .Params.tags }}
             <span class="blog-post__tags">
               {{ range . }}<a class="tag-badge" href="{{ (printf "/tags/%s/" (urlize .)) | relURL }}">{{ . }}</a>{{ end }}
@@ -53,5 +103,3 @@
   </main>
 </div>
 {{ end }}
-
-

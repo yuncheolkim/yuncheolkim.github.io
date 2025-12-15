@@ -1,42 +1,89 @@
 {{ define "main" }}
 {{ $p := .Paginate .Pages 10 }}
 {{ $firstPost := index $p.Pages 0 }}
-{{ $pages := (where $.Site.RegularPages "Section" "posts").ByDate.Reverse }}
+{{ $allPosts := (where $.Site.RegularPages "Section" "posts").ByDate.Reverse }}
+
+{{/* 从 posts 文章中收集分类 */}}
 {{ $scratch := newScratch }}
-{{ range $pages }}
-  {{ $scratch.Add "dirs" (slice .File.Dir) }}
+{{ range $allPosts }}
+  {{ with .Params.categories }}
+    {{ range . }}
+      {{ $scratch.Add "categories" (slice .) }}
+    {{ end }}
+  {{ end }}
+  {{ with .Params.tags }}
+    {{ range . }}
+      {{ $scratch.Add "tags" (slice .) }}
+    {{ end }}
+  {{ end }}
 {{ end }}
-{{ $dirs := uniq ($scratch.Get "dirs") }}
+{{ $postCategories := uniq ($scratch.Get "categories") }}
+{{ $postTags := uniq ($scratch.Get "tags") }}
 
 <div class="blog-layout">
   <aside class="blog-sidebar">
-    <div class="panel">
-      <h2 class="blog-sidebar__title">最近文章</h2>
+    {{/* 最新文章区块 */}}
+    <div class="panel sidebar-section">
+      <h2 class="sidebar-section__title">📄 最新文章</h2>
       <nav class="blog-sidebar__list">
-        {{ range sort $dirs }}
-          {{ $dir := strings.TrimSuffix . "/" }}
-          {{ $dirName := default "posts" (strings.TrimPrefix $dir "posts/") }}
-          <div class="blog-sidebar__group">
-            <div class="blog-sidebar__group-title">{{ $dirName }}</div>
-            {{ range where $pages "File.Dir" . }}
-              <a class="blog-sidebar__item {{ if eq .RelPermalink $firstPost.RelPermalink }}is-active{{ end }}" href="{{ .RelPermalink }}">
-                <div class="blog-sidebar__item-title">{{ .Title }}</div>
-                <div class="blog-sidebar__item-meta">
-                  <time>{{ .Date.Format "2006-01-02" }}</time>
-                </div>
-              </a>
-            {{ end }}
-          </div>
+        {{ range first 8 $allPosts }}
+          <a class="blog-sidebar__item {{ if eq .RelPermalink $firstPost.RelPermalink }}is-active{{ end }}" href="{{ .RelPermalink }}">
+            <div class="blog-sidebar__item-title">{{ .Title }}</div>
+            <div class="blog-sidebar__item-meta">
+              <time>{{ .Date.Format "2006-01-02" }}</time>
+            </div>
+          </a>
         {{ end }}
       </nav>
-      {{ if gt $p.TotalPages 1 }}
-        <div class="blog-sidebar__pagination">
-          {{ if $p.HasPrev }}<a class="ghost-link" href="{{ $p.Prev.URL }}">上一页</a>{{ end }}
-          <span class="blog-pagination__info">第 {{ $p.PageNumber }} / {{ $p.TotalPages }} 页</span>
-          {{ if $p.HasNext }}<a class="ghost-link" href="{{ $p.Next.URL }}">下一页</a>{{ end }}
+      {{ if gt (len $allPosts) 8 }}
+        <div class="blog-sidebar__footer">
+          <span class="ghost-link">共 {{ len $allPosts }} 篇文章</span>
         </div>
       {{ end }}
     </div>
+
+    {{/* 分类区块 */}}
+    {{ if $postCategories }}
+    <div class="panel sidebar-section">
+      <h2 class="sidebar-section__title">📁 分类</h2>
+      <nav class="category-list">
+        {{ range $postCategories }}
+          {{ $count := len (where $allPosts ".Params.categories" "intersect" (slice .)) }}
+          <a class="category-list__item" href="{{ (printf "/categories/%s/" (urlize .)) | relURL }}">
+            <span class="category-list__name">{{ . }}</span>
+            <span class="category-list__count">{{ $count }}</span>
+          </a>
+        {{ end }}
+      </nav>
+    </div>
+    {{ end }}
+
+    {{/* 标签区块 */}}
+    {{ if $postTags }}
+    <div class="panel sidebar-section">
+      <h2 class="sidebar-section__title">🏷️ 标签</h2>
+      <div class="filter-cloud">
+        {{ range $postTags }}
+          {{ $count := len (where $allPosts ".Params.tags" "intersect" (slice .)) }}
+          <a class="filter-tag filter-tag--tag" href="{{ (printf "/tags/%s/" (urlize .)) | relURL }}">
+            <span class="filter-tag__name">{{ . }}</span>
+            <span class="filter-tag__count">{{ $count }}</span>
+          </a>
+        {{ end }}
+      </div>
+    </div>
+    {{ end }}
+
+    {{/* 分页 */}}
+    {{ if gt $p.TotalPages 1 }}
+      <div class="panel sidebar-section">
+        <div class="blog-sidebar__pagination">
+          {{ if $p.HasPrev }}<a class="ghost-link" href="{{ $p.Prev.URL }}">« 上一页</a>{{ end }}
+          <span class="blog-pagination__info">第 {{ $p.PageNumber }} / {{ $p.TotalPages }} 页</span>
+          {{ if $p.HasNext }}<a class="ghost-link" href="{{ $p.Next.URL }}">下一页 »</a>{{ end }}
+        </div>
+      </div>
+    {{ end }}
   </aside>
 
   <main class="blog-content">
@@ -46,6 +93,11 @@
           <h1 class="blog-post__title">{{ $firstPost.Title }}</h1>
           <div class="blog-post__meta">
             <time datetime="{{ $firstPost.Date.Format "2006-01-02" }}">{{ $firstPost.Date.Format "2006-01-02" }}</time>
+            {{ with $firstPost.Params.categories }}
+              <span class="blog-post__categories">
+                {{ range . }}<a class="category-badge" href="{{ (printf "/categories/%s/" (urlize .)) | relURL }}">{{ . }}</a>{{ end }}
+              </span>
+            {{ end }}
             {{ with $firstPost.Params.tags }}
               <span class="blog-post__tags">
                 {{ range . }}<a class="tag-badge" href="{{ (printf "/tags/%s/" (urlize .)) | relURL }}">{{ . }}</a>{{ end }}
@@ -67,5 +119,3 @@
   </main>
 </div>
 {{ end }}
-
-
