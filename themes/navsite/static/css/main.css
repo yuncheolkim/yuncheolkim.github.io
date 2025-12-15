@@ -762,13 +762,13 @@ a {
 .reader-body .prose a {
   color: var(--reader-link);
   text-decoration: underline;
-  text-decoration-color: rgba(201, 168, 108, 0.4);
+  text-decoration-color: rgba(124, 200, 255, 0.4);
   text-underline-offset: 3px;
 }
 
 .reader-body .prose a:hover {
-  color: var(--reader-accent);
-  text-decoration-color: var(--reader-accent);
+  color: var(--reader-accent-2);
+  text-decoration-color: var(--reader-accent-2);
 }
 
 .reader-body .prose h2,
@@ -778,7 +778,7 @@ a {
 }
 
 .reader-body .prose code {
-  background: rgba(212, 165, 116, 0.1);
+  background: rgba(124, 200, 255, 0.1);
   border-color: var(--reader-border);
   color: var(--reader-accent);
 }
@@ -789,8 +789,8 @@ a {
 }
 
 .reader-body .prose blockquote {
-  border-left-color: var(--reader-accent);
-  background: rgba(212, 165, 116, 0.08);
+  border-left-color: var(--reader-accent-2);
+  background: rgba(124, 240, 198, 0.06);
   color: var(--reader-text-secondary);
 }
 
@@ -1410,18 +1410,18 @@ a {
 /* Reader Layout - 阅读页面 */
 /* ==================== */
 
-/* 阅读模式配色变量 - 暖色护眼 */
+/* 阅读模式配色变量 - 深蓝护眼 */
 .reader-layout {
-  --reader-bg: #1a1814;
-  --reader-panel: rgba(32, 28, 24, 0.95);
-  --reader-panel-hover: rgba(42, 36, 30, 0.98);
-  --reader-text: #e8e4dc;
-  --reader-text-secondary: #b8b0a4;
-  --reader-border: rgba(180, 160, 140, 0.12);
-  --reader-accent: #d4a574;
-  --reader-accent-2: #a8c4a0;
-  --reader-link: #c9a86c;
-  --reader-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --reader-bg: #0d1220;
+  --reader-panel: rgba(17, 24, 42, 0.95);
+  --reader-panel-hover: rgba(22, 32, 55, 0.98);
+  --reader-text: #e4e8f0;
+  --reader-text-secondary: #9ca8c0;
+  --reader-border: rgba(124, 200, 255, 0.1);
+  --reader-accent: #7cc8ff;
+  --reader-accent-2: #7cf0c6;
+  --reader-link: #7cc8ff;
+  --reader-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 /* 阅读进度条 */
@@ -1434,7 +1434,7 @@ a {
   background: linear-gradient(90deg, var(--reader-accent), var(--reader-accent-2));
   z-index: 100;
   transition: width 0.1s ease;
-  box-shadow: 0 0 10px rgba(212, 165, 116, 0.5);
+  box-shadow: 0 0 10px rgba(124, 200, 255, 0.5);
 }
 
 /* 阅读器布局 */
@@ -1504,12 +1504,12 @@ a {
 
 .toc-nav a:hover {
   color: var(--reader-text);
-  background: rgba(212, 165, 116, 0.1);
+  background: rgba(124, 200, 255, 0.08);
 }
 
 .toc-nav a.is-active {
   color: var(--reader-accent);
-  background: rgba(212, 165, 116, 0.15);
+  background: rgba(124, 200, 255, 0.12);
   border-left-color: var(--reader-accent);
 }
 
@@ -1535,7 +1535,7 @@ a {
 /* 文章头部 */
 .reader-header {
   padding: 40px 40px 30px;
-  background: linear-gradient(180deg, rgba(212, 165, 116, 0.08) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(124, 200, 255, 0.06) 0%, transparent 100%);
   border-bottom: 1px solid var(--reader-border);
 }
 
@@ -1547,7 +1547,7 @@ a {
   display: inline-block;
   padding: 6px 14px;
   border-radius: 20px;
-  background: rgba(212, 165, 116, 0.2);
+  background: rgba(124, 200, 255, 0.15);
   color: var(--reader-accent);
   font-size: 0.85rem;
   font-weight: 600;
@@ -1557,7 +1557,7 @@ a {
 }
 
 .reader-category:hover {
-  background: rgba(212, 165, 116, 0.35);
+  background: rgba(124, 200, 255, 0.25);
 }
 
 .reader-header__title {
@@ -1605,13 +1605,13 @@ a {
 }
 
 .reader-header__tags .tag-badge {
-  background: rgba(168, 196, 160, 0.15);
-  border-color: rgba(168, 196, 160, 0.3);
+  background: rgba(124, 240, 198, 0.12);
+  border-color: rgba(124, 240, 198, 0.25);
   color: var(--reader-accent-2);
 }
 
 .reader-header__tags .tag-badge:hover {
-  background: rgba(168, 196, 160, 0.25);
+  background: rgba(124, 240, 198, 0.2);
   border-color: var(--reader-accent-2);
 }
 
@@ -1641,7 +1641,7 @@ a {
   padding: 16px 20px;
   border-radius: 12px;
   border: 1px solid var(--reader-border);
-  background: rgba(212, 165, 116, 0.05);
+  background: rgba(124, 200, 255, 0.03);
   text-decoration: none;
   color: var(--reader-text);
   transition: all 0.2s ease;
@@ -1649,7 +1649,7 @@ a {
 
 .article-nav__item:hover:not(.article-nav__empty) {
   border-color: var(--reader-accent);
-  background: rgba(212, 165, 116, 0.12);
+  background: rgba(124, 200, 255, 0.1);
   transform: translateY(-2px);
 }
 
@@ -1693,7 +1693,7 @@ a {
   padding: 10px 20px;
   border-radius: 10px;
   border: 1px solid var(--reader-border);
-  background: rgba(212, 165, 116, 0.08);
+  background: rgba(124, 200, 255, 0.05);
   color: var(--reader-text);
   font-size: 0.9rem;
   cursor: pointer;
@@ -1703,7 +1703,7 @@ a {
 
 .reader-btn:hover {
   border-color: var(--reader-accent);
-  background: rgba(212, 165, 116, 0.2);
+  background: rgba(124, 200, 255, 0.15);
   color: var(--reader-accent);
 }
 
