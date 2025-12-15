@@ -1,6 +1,6 @@
 +++
-title = "汽车01"
-date = 2025-12-15T12:00:00+08:00
+title = "汽车事故处理"
+date = 2025-12-15T10:00:00+08:00
 draft = false
 slug = "car-01"
 author = "yuncheol kim"

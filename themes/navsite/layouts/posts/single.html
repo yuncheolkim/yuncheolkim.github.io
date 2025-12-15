@@ -28,6 +28,11 @@
         <h1 class="blog-post__title">{{ .Title }}</h1>
         <div class="blog-post__meta">
           <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+            {{ with .Params.categories }}
+              <span class="blog-post__categories">
+                {{ range . }}<a class="tag-badge" href="{{ (printf "/categories/%s/" (urlize .)) | relURL }}">{{ . }}</a>{{ end }}
+              </span>
+            {{ end }}
           {{ with .Params.tags }}
             <span class="blog-post__tags">
               {{ range . }}<a class="tag-badge" href="{{ (printf "/tags/%s/" (urlize .)) | relURL }}">{{ . }}</a>{{ end }}

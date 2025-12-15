@@ -1,19 +1,32 @@
 {{ define "main" }}
 {{ $p := .Paginate .Pages 10 }}
 {{ $firstPost := index $p.Pages 0 }}
+{{ $pages := (where $.Site.RegularPages "Section" "posts").ByDate.Reverse }}
+{{ $scratch := newScratch }}
+{{ range $pages }}
+  {{ $scratch.Add "dirs" (slice .File.Dir) }}
+{{ end }}
+{{ $dirs := uniq ($scratch.Get "dirs") }}
 
 <div class="blog-layout">
   <aside class="blog-sidebar">
     <div class="panel">
       <h2 class="blog-sidebar__title">最近文章</h2>
       <nav class="blog-sidebar__list">
-        {{ range $p.Pages }}
-          <a class="blog-sidebar__item {{ if eq .RelPermalink $firstPost.RelPermalink }}is-active{{ end }}" href="{{ .RelPermalink }}">
-            <div class="blog-sidebar__item-title">{{ .Title }}</div>
-            <div class="blog-sidebar__item-meta">
-              <time>{{ .Date.Format "2006-01-02" }}</time>
-            </div>
-          </a>
+        {{ range sort $dirs }}
+          {{ $dir := strings.TrimSuffix . "/" }}
+          {{ $dirName := default "posts" (strings.TrimPrefix $dir "posts/") }}
+          <div class="blog-sidebar__group">
+            <div class="blog-sidebar__group-title">{{ $dirName }}</div>
+            {{ range where $pages "File.Dir" . }}
+              <a class="blog-sidebar__item {{ if eq .RelPermalink $firstPost.RelPermalink }}is-active{{ end }}" href="{{ .RelPermalink }}">
+                <div class="blog-sidebar__item-title">{{ .Title }}</div>
+                <div class="blog-sidebar__item-meta">
+                  <time>{{ .Date.Format "2006-01-02" }}</time>
+                </div>
+              </a>
+            {{ end }}
+          </div>
         {{ end }}
       </nav>
       {{ if gt $p.TotalPages 1 }}
