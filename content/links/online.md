@@ -115,5 +115,11 @@ desc = "Free Tex Packer, 在线纹理打包"
 tags = ["在线", "工具","纹理","游戏"]
 
 
+[[links]]
+name = "ILoveImg"
+url = "https://www.iloveimg.com/zh-cn"
+logo = "https://www.iloveimg.com/img/iloveimg.svg"
+desc = "在线图片处理"
+tags = ["图片","在线", "Free"]
 +++
 

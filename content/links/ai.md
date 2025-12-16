@@ -74,7 +74,7 @@ name = "微软图片生成器"
 url = "https://designer.microsoft.com/image-creator"
 desc = "Microsoft Image Creator, 在线图片生成"
 tags = ["图片","微软"]
-logo = "https://designer.microsoft.com/favicon.ico"
+logo = "https://res.public.onecdn.static.microsoft/designer/client/prod/static/media/favicon-32.png"
 
 [[links]]
 name = "Midjourney"
