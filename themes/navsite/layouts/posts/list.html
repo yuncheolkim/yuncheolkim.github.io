@@ -84,12 +84,37 @@
         <span id="filter-count" class="filter-count">{{ len $allPosts }} 篇</span>
       </div>
       
+      <!-- 搜索框 -->
+      <div class="search-container">
+        <div class="search-wrapper">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <input type="text" id="articleSearch" class="search-input" placeholder="搜索文章标题、摘要、分类或标签..." autocomplete="off">
+          <button id="clearArticleSearch" class="search-clear" style="display: none;" title="清除搜索">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6 6 18"></path>
+              <path d="m6 6 12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      
       {{ if $allPosts }}
         <div class="article-list" id="article-list">
           {{ range $allPosts }}
+            {{ $summary := "" }}
+            {{ if .Params.summary }}
+              {{ $summary = .Params.summary }}
+            {{ else }}
+              {{ $summary = .Summary | plainify | truncate 120 }}
+            {{ end }}
             <article class="article-card" 
-              data-categories="{{ with .Params.categories }}{{ delimit . "," }}{{ end }}"
-              data-tags="{{ with .Params.tags }}{{ delimit . "," }}{{ end }}">
+              data-title="{{ .Title | lower }}"
+              data-summary="{{ $summary | lower }}"
+              data-categories="{{ with .Params.categories }}{{ delimit . "," | lower }}{{ end }}"
+              data-tags="{{ with .Params.tags }}{{ delimit . "," | lower }}{{ end }}">
               <header class="article-card__header">
                 <h3 class="article-card__title">
                   <a href="{{ .RelPermalink }}">{{ .Title }}</a>
@@ -143,6 +168,7 @@
   if (urlTag) {
     selectedTags.add(decodeURIComponent(urlTag));
   }
+  let searchQuery = '';
   
   const articles = document.querySelectorAll('.article-card');
   const categoryButtons = document.querySelectorAll('#category-filter .category-list__item');
@@ -152,6 +178,8 @@
   const noResults = document.getElementById('no-results');
   const articleList = document.getElementById('article-list');
   const resetTagsBtn = document.getElementById('reset-tags');
+  const searchInput = document.getElementById('articleSearch');
+  const clearSearchBtn = document.getElementById('clearArticleSearch');
   
   // 根据 URL 参数设置初始状态
   if (urlCategory) {
@@ -172,21 +200,33 @@
   
   function filterArticles() {
     let visibleCount = 0;
+    const query = searchQuery.toLowerCase().trim();
     
     articles.forEach(article => {
       const articleCategories = article.dataset.categories ? article.dataset.categories.split(',') : [];
       const articleTags = article.dataset.tags ? article.dataset.tags.split(',') : [];
+      const articleTitle = article.dataset.title || '';
+      const articleSummary = article.dataset.summary || '';
       
       // 检查分类
-      const categoryMatch = currentCategory === 'all' || articleCategories.includes(currentCategory);
+      const categoryMatch = currentCategory === 'all' || articleCategories.includes(currentCategory.toLowerCase());
       
       // 检查标签（如果选中了标签，文章必须包含所有选中的标签）
       let tagMatch = true;
       if (selectedTags.size > 0) {
-        tagMatch = [...selectedTags].every(tag => articleTags.includes(tag));
+        tagMatch = [...selectedTags].every(tag => articleTags.includes(tag.toLowerCase()));
       }
       
-      if (categoryMatch && tagMatch) {
+      // 检查搜索关键词
+      let searchMatch = true;
+      if (query) {
+        searchMatch = articleTitle.includes(query) || 
+                     articleSummary.includes(query) ||
+                     articleCategories.some(cat => cat.includes(query)) ||
+                     articleTags.some(tag => tag.includes(query));
+      }
+      
+      if (categoryMatch && tagMatch && searchMatch) {
         article.style.display = '';
         visibleCount++;
       } else {
@@ -196,6 +236,9 @@
     
     // 更新标题和计数
     let titleParts = [];
+    if (query) {
+      titleParts.push(`搜索: "${query}"`);
+    }
     if (currentCategory !== 'all') {
       titleParts.push(currentCategory);
     }
@@ -252,6 +295,36 @@
       selectedTags.clear();
       tagButtons.forEach(btn => btn.classList.remove('is-active'));
       filterArticles();
+    });
+  }
+  
+  // 搜索功能
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      searchQuery = this.value;
+      clearSearchBtn.style.display = searchQuery ? 'flex' : 'none';
+      filterArticles();
+    });
+    
+    // 支持按 ESC 清除搜索
+    searchInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        this.value = '';
+        searchQuery = '';
+        clearSearchBtn.style.display = 'none';
+        filterArticles();
+      }
+    });
+  }
+  
+  // 清除搜索按钮
+  if (clearSearchBtn) {
+    clearSearchBtn.addEventListener('click', function() {
+      searchInput.value = '';
+      searchQuery = '';
+      this.style.display = 'none';
+      filterArticles();
+      searchInput.focus();
     });
   }
   

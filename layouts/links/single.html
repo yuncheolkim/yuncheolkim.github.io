@@ -6,10 +6,31 @@
   </header>
 
   {{ with .Params.links }}
-    <div class="link-grid">
+    <!-- 搜索框 -->
+    <div class="search-container">
+      <div class="search-wrapper">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+        <input type="text" id="linkSearch" class="search-input" placeholder="搜索链接名称、描述或标签..." autocomplete="off">
+        <span id="searchCount" class="search-count"></span>
+        <button id="clearSearch" class="search-clear" style="display: none;" title="清除搜索">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="link-grid" id="linkGrid">
       {{ range . }}
         {{ $link := . }}
-        <a class="link-card" href="{{ $link.url }}" target="_blank" rel="noopener">
+        <a class="link-card" href="{{ $link.url }}" target="_blank" rel="noopener"
+           data-name="{{ $link.name | lower }}"
+           data-desc="{{ $link.desc | lower }}"
+           data-tags="{{ with $link.tags }}{{ delimit . "," | lower }}{{ else }}{{ end }}">
           <div class="link-card__header">
             <span class="card__logo">
               {{ with $link.logo }}
@@ -37,5 +58,83 @@
     <p>暂无链接，稍后再来。</p>
   {{ end }}
 </article>
+
+<script>
+(function() {
+  const searchInput = document.getElementById('linkSearch');
+  const clearBtn = document.getElementById('clearSearch');
+  const searchCount = document.getElementById('searchCount');
+  const linkGrid = document.getElementById('linkGrid');
+  
+  if (!searchInput || !linkGrid) return;
+  
+  const linkCards = linkGrid.querySelectorAll('.link-card');
+  const totalCount = linkCards.length;
+  
+  function updateSearch() {
+    const query = searchInput.value.toLowerCase().trim();
+    let visibleCount = 0;
+    
+    // 显示/隐藏清除按钮
+    clearBtn.style.display = query ? 'flex' : 'none';
+    
+    linkCards.forEach(card => {
+      if (!query) {
+        card.style.display = '';
+        visibleCount++;
+        return;
+      }
+      
+      const name = card.dataset.name || '';
+      const desc = card.dataset.desc || '';
+      const tags = card.dataset.tags || '';
+      
+      const matches = name.includes(query) || 
+                      desc.includes(query) || 
+                      tags.includes(query);
+      
+      card.style.display = matches ? '' : 'none';
+      if (matches) visibleCount++;
+    });
+    
+    // 更新计数显示
+    if (query) {
+      searchCount.textContent = visibleCount + ' / ' + totalCount;
+      searchCount.style.display = 'inline';
+    } else {
+      searchCount.style.display = 'none';
+    }
+    
+    // 空结果提示
+    const noResult = linkGrid.querySelector('.no-result-msg');
+    if (visibleCount === 0 && query) {
+      if (!noResult) {
+        const msg = document.createElement('div');
+        msg.className = 'no-result-msg';
+        msg.textContent = '没有找到匹配的链接';
+        linkGrid.appendChild(msg);
+      }
+    } else if (noResult) {
+      noResult.remove();
+    }
+  }
+  
+  searchInput.addEventListener('input', updateSearch);
+  
+  clearBtn.addEventListener('click', function() {
+    searchInput.value = '';
+    updateSearch();
+    searchInput.focus();
+  });
+  
+  // 支持按 ESC 清除搜索
+  searchInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      searchInput.value = '';
+      updateSearch();
+    }
+  });
+})();
+</script>
 {{ end }}
 
