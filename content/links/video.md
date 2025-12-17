@@ -27,10 +27,5 @@ tags = ["Free", "Paid","剪辑"]
 logo = "https://lf3-s.vlabstatic.com/obj/vilab-static/ies/ulike/web/resource/fe_official/assets/imgs/lv/favicon.ico"
 
 
-[[links]]
-name = "FFmpeg"
-url = "https://ffmpeg.org"
-desc = "跨平台开源音视频转码与处理"
-tags = ["Open Source", "Free"]
 +++
 
