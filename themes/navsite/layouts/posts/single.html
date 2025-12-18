@@ -9,6 +9,10 @@
 {{ $readingTime := div $wordCount 300 }}
 {{ if lt $readingTime 1 }}{{ $readingTime = 1 }}{{ end }}
 
+{{/* 检查是否有目录内容 */}}
+{{ $toc := .TableOfContents }}
+{{ $hasToc := gt (len (findRE "<li" $toc)) 0 }}
+
 {{/* 获取上一篇和下一篇文章 */}}
 {{ $currentIndex := 0 }}
 {{ range $index, $post := $allPosts }}
@@ -22,8 +26,9 @@
 <!-- 阅读进度条 -->
 <div class="reading-progress" id="reading-progress"></div>
 
-<div class="reader-layout">
+<div class="reader-layout{{ if not $hasToc }} reader-layout--no-toc{{ end }}">
   <!-- 左侧目录 -->
+  {{ if $hasToc }}
   <aside class="toc-sidebar" id="toc-sidebar">
     <div class="toc-container">
       <h3 class="toc-title">📑 目录</h3>
@@ -35,6 +40,7 @@
       </div>
     </div>
   </aside>
+  {{ end }}
 
   <!-- 主内容区 -->
   <main class="reader-content">
