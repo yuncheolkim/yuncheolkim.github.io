@@ -814,8 +814,8 @@ a {
 
 .prose {
   color: var(--reader-text, rgba(245, 247, 255, 0.92));
-  line-height: 2;
-  font-size: 1.05rem;
+  line-height: 1.8;
+  font-size: 0.95rem;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   letter-spacing: 0.02em;
   text-align: justify;
