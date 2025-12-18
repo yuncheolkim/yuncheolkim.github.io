@@ -592,6 +592,7 @@ a {
   border: 1px solid var(--border);
   color: var(--text);
   background: rgba(124, 200, 255, 0.12);
+  text-decoration: none;
 }
 
 .tag-badge:nth-child(4n + 1) {
@@ -1711,6 +1712,7 @@ a {
   background: rgba(124, 240, 198, 0.12);
   border-color: rgba(124, 240, 198, 0.25);
   color: var(--reader-accent-2);
+  text-decoration: none;
 }
 
 .reader-header__tags .tag-badge:hover {

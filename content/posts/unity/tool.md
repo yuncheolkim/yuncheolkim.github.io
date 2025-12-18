@@ -21,5 +21,5 @@ YooAsset 是一个用于在 Unity 中使用 AssetBundle 的插件。
 
 ## hybridclr
 热更新代码
-[hybridclr ](https://www.hybridclr.cn/)
 
+<a href="https://www.hybridclr.cn/" target="_blank">hybridclr</a>
