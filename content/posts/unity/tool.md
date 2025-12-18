@@ -13,11 +13,13 @@ summary = "常用插件"
 ## UnityWebSocket
 UnityWebSocket 是一个用于在 Unity 中使用 WebSocket 的插件。
 
+<a href="https://github.com/psygames/UnityWebSocket" target="_blank">UnityWebSocket</a>
+
 
 ## YooAsset
 YooAsset 是一个用于在 Unity 中使用 AssetBundle 的插件。
 
 ## hybridclr
-
+热更新代码
 [hybridclr ](https://www.hybridclr.cn/)
 
