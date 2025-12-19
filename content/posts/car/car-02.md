@@ -10,7 +10,7 @@ summary = "上下班发生交通事故处理"
 +++
 
 
-<img src="/images/posts/IMG_0602.png" alt="上下班发生交通事故处理" style="width:100%;height:100%;" />
+<img src="/images/posts/IMG_0602.png" alt="上下班发生交通事故处理" />
 
 全责的话，你一定要拿到责任认定书。
 
@@ -28,4 +28,4 @@ summary = "上下班发生交通事故处理"
 
 外地车要不当天处理了，要不就要他的个人信息，因为法院立案要被告人的详细信息的（我这案子就是外地车，当场对方没报保险，说是他私下赔付。过几个月直接嚣张到让你去报警去法院，就不给钱，反正他外地的）
 
-<img src="/images/posts/c1.png" alt="上下班发生交通事故处理" style="width:100%;height:100%;" />
+<img src="/images/posts/c1.png" alt="上下班发生交通事故处理"  />
