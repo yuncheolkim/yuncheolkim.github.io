@@ -5,7 +5,7 @@ draft = false
 slug = "car-01"
 author = "yuncheol kim"
 categories = ["汽车"]
-tags = ["汽车","事故"]
+tags = ["汽车","交通事故"]
 summary = "不垫付、 不探望 、不调解，没有钱。"
 
 +++
