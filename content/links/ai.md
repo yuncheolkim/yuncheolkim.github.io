@@ -47,6 +47,12 @@ desc = "AI 对话与生成"
 tags = ["通用","cn"]
 logo = "https://deepseek.com/favicon.ico"
 
+[[links]]
+name = "千问"
+url = "https://qianwen.com"
+desc = "AI 对话与生成"
+tags = ["通用","cn"]
+logo = "https://qianwen.com/favicon.ico"
 
 [[links]]
 name = "banana"
