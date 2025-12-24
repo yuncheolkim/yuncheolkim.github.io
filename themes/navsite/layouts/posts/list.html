@@ -177,6 +177,7 @@
   const filterCount = document.getElementById('filter-count');
   const noResults = document.getElementById('no-results');
   const articleList = document.getElementById('article-list');
+  const resetCategoryBtn = document.getElementById('reset-category');
   const resetTagsBtn = document.getElementById('reset-tags');
   const searchInput = document.getElementById('articleSearch');
   const clearSearchBtn = document.getElementById('clearArticleSearch');
@@ -258,13 +259,18 @@
       articleList.style.display = '';
     }
     
+    // 显示/隐藏清除分类按钮
+    if (resetCategoryBtn) {
+      resetCategoryBtn.style.display = currentCategory !== 'all' ? '' : 'none';
+    }
+    
     // 显示/隐藏清除标签按钮
     if (resetTagsBtn) {
       resetTagsBtn.style.display = selectedTags.size > 0 ? '' : 'none';
     }
   }
   
-  // 分类点击事件
+  // 分类点击事件（单选）
   categoryButtons.forEach(btn => {
     btn.addEventListener('click', function() {
       categoryButtons.forEach(b => b.classList.remove('is-active'));
@@ -273,6 +279,20 @@
       filterArticles();
     });
   });
+  
+  // 清除分类按钮
+  if (resetCategoryBtn) {
+    resetCategoryBtn.addEventListener('click', function() {
+      currentCategory = 'all';
+      categoryButtons.forEach(btn => {
+        btn.classList.remove('is-active');
+        if (btn.dataset.category === 'all') {
+          btn.classList.add('is-active');
+        }
+      });
+      filterArticles();
+    });
+  }
   
   // 标签点击事件（多选）
   tagButtons.forEach(btn => {

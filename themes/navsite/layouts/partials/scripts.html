@@ -71,24 +71,13 @@
     categoryButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
         const cat = btn.dataset.filter;
-        if (cat === "all") {
-          selectedCats.clear();
-          selectedCats.add("all");
-          categoryButtons.forEach((b) => toggleActive(b, b.dataset.filter === "all"));
-        } else {
-          // toggle selection
-          if (selectedCats.has("all")) selectedCats.delete("all");
-          if (selectedCats.has(cat)) {
-            selectedCats.delete(cat);
-          } else {
-            selectedCats.add(cat);
-          }
-          // if none selected, fallback to all
-          if (selectedCats.size === 0) selectedCats.add("all");
-          categoryButtons.forEach((b) =>
-            toggleActive(b, selectedCats.has(b.dataset.filter))
-          );
-        }
+        
+        selectedCats.clear();
+        selectedCats.add(cat);
+        
+        categoryButtons.forEach((b) =>
+          toggleActive(b, b.dataset.filter === cat)
+        );
 
         const currentSort =
           sortButtons.find((b) => b.classList.contains("is-active"))?.dataset

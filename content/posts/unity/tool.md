@@ -26,3 +26,6 @@ YooAsset 是一个用于在 Unity 中使用 AssetBundle 的插件。
 
 <a href="https://www.hybridclr.cn/" target="_blank">hybridclr</a>
 
+## xchart
+xchart 可以用于绘制图表。
+<a href="https://xcharts-team.github.io/examples" target="_blank">xchart</a>
