@@ -40,5 +40,42 @@ desc = "Tauri 是一个用于构建桌面应用程序的框架，它允许开发
 tags = ["编程","框架","desktop","web"]
 logo = "https://v2.tauri.app/favicon.svg"
 
+
+[[links]]
+name = "Shader Learn"
+url = "https://shader-learn.com"
+desc = "Shader Learn, 一个学习 Shader 的网站"
+tags = ["编程","shader","教程"]
+logo = "https://shader-learn.com/favicon.ico"
+
+[[links]]
+name = "Catlike Coding"
+url = "https://catlikecoding.com/unity/tutorials/rounded-cube/"
+desc = "Catlike Coding, 一个学习 Unity 的网站"
+tags = ["编程","unity","教程"]
+logo = "https://catlikecoding.com/favicon.ico"
+
+[[links]]
+name = "RenderDoc"
+url = "https://renderdoc.org/"
+desc = "RenderDoc, 一个图形调试器，可以捕获和分析图形 API 调用"
+tags = ["编程","shader","工具"]
+logo = "https://renderdoc.org/favicon.ico"
+
+
+[[links]]
+name = "GLSL Sandbox"
+url = "https://glslsandbox.com/"
+desc = "GLSL Sandbox, 一个在线的 GLSL 沙盒，可以编写和运行 GLSL 代码"
+tags = ["编程","shader","工具"]
+logo = "https://glslsandbox.com/favicon.ico"
+
+[[links]]
+name = "Shadertoy"
+url = "https://www.shadertoy.com/"
+desc = "Shadertoy, 一个在线的 Shader 沙盒，可以编写和运行 Shader 代码"
+tags = ["编程","shader","工具"]
+logo = "https://www.shadertoy.com/favicon.ico"
+
 +++
 
