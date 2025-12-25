@@ -10,8 +10,14 @@ name = "TradingEconomics"
 url = "https://zh.tradingeconomics.com/"
 logo = "https://zh.tradingeconomics.com/favicon.ico"
 desc = "TradingEconomics"
-tags = ["新闻", "股票"]
+tags = [ "股票"]
 
+[[links]]
+name = "TradingView"
+url = "https://cn.tradingview.com/markets/usa/"
+logo = "https://cn.tradingview.com/favicon.ico"
+desc = "TradingView"
+tags = ["股票"]
 
 +++
 
