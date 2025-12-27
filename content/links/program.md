@@ -77,5 +77,12 @@ desc = "Shadertoy, 一个在线的 Shader 沙盒，可以编写和运行 Shader 
 tags = ["编程","shader","工具"]
 logo = "https://www.shadertoy.com/favicon.ico"
 
+[[links]]
+name = "The Book of Shaders"
+url = "https://thebookofshaders.com/?lan=ch"
+desc = "The Book of Shaders, 一个学习 Shader 的网站"
+tags = ["编程","shader","教程"]
+logo = "https://thebookofshaders.com/favicon.ico"
+
 +++
 
