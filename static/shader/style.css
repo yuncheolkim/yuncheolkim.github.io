@@ -1,0 +1,382 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 1800px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 20px;
+    align-items: stretch; /* 确保左右面板等高并填充 */
+    min-height: calc(100vh - 200px);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+/* 左侧面板 */
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* 防止 flex 子元素溢出 */
+    height: calc(100vh - 200px); /* 显式设置高度 */
+}
+
+/* 右侧面板 */
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.canvas-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f5f5f5;
+    border-radius: 8px; /* 恢复圆角 */
+    padding: 20px;
+    position: sticky;
+    top: 20px;
+    max-height: calc(100vh - 200px);
+    overflow: hidden; 
+}
+
+#glCanvas {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #ddd;
+    border-radius: 4px; /* 恢复圆角 */
+    background: #000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.controls {
+    text-align: center;
+    margin-top: 20px;
+    flex-shrink: 0;
+    position: relative; /* 添加相对定位 */
+}
+
+.control-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.auto-apply-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.auto-apply-toggle:hover {
+    background: #f0f0f0;
+}
+
+.auto-apply-toggle input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #667eea;
+}
+
+.auto-apply-toggle span {
+    font-size: 14px;
+    color: #333;
+}
+
+button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-bottom: 15px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.info {
+    margin-top: 15px;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.info p {
+    margin: 5px 0;
+}
+
+/* 着色器编辑器容器 */
+.shader-editor-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+/* 标签页导航 */
+.tab-nav {
+    display: flex;
+    background: #f0f0f0;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: #666;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin: 0;
+    border-radius: 0;
+}
+
+.tab-btn:hover {
+    background: #e8e8e8;
+    color: #333;
+}
+
+.tab-btn.active {
+    background: white;
+    color: #667eea;
+    border-bottom-color: #667eea;
+}
+
+.tab-btn:active {
+    transform: none;
+    box-shadow: none;
+}
+
+/* 标签页内容 */
+.tab-content {
+    flex: 1;
+    position: relative;
+    min-height: 0;
+}
+
+.tab-pane {
+    display: none;
+    height: 100%;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.tab-pane.active {
+    display: flex;
+}
+
+.shader-panel {
+    border: none;
+    border-radius: 0;
+    overflow: hidden;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+}
+
+.editor-wrapper {
+    display: flex;
+    flex: 1;
+    position: relative;
+    background: #272822; /* 匹配 monokai 主题背景 */
+    overflow: hidden;
+    height: 100%; /* 确保 wrapper 填满父级 */
+}
+
+/* CodeMirror 样式覆盖 */
+.CodeMirror {
+    width: 100%;
+    height: 100% !important; /* 强制填满父容器 */
+    flex: 1;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.line-numbers {
+    display: none; /* 移除原来的行号 */
+}
+
+.shader-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.header-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.shader-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.btn-small {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-small:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.shader-editor:focus {
+    background: #252526;
+}
+
+/* 隐藏不再需要的 textarea 样式 */
+.shader-editor {
+    display: none;
+}
+
+/* 优化错误显示：移动到右侧 Canvas 上方悬浮 */
+.error-display {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    right: 30px;
+    margin: 0;
+    padding: 15px;
+    border-radius: 8px;
+    background: rgba(255, 245, 245, 0.95);
+    border: 1px solid #fcc;
+    border-left: 6px solid #f44;
+    color: #c33;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    display: none;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    z-index: 1000;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    max-height: 40%;
+    overflow-y: auto;
+    backdrop-filter: blur(4px);
+}
+
+.error-display.show {
+    display: block;
+}
+
+.error-display.success {
+    background: rgba(245, 255, 245, 0.95);
+    border-color: #cfc;
+    border-left-color: #4c4;
+    color: #363;
+}
+
+/* 响应式设计 */
+@media (max-width: 1400px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .canvas-container {
+        position: static;
+        margin-top: 20px;
+    }
+    
+    .right-panel {
+        order: -1; /* 在小屏幕上，canvas 显示在上方 */
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 22px;
+    }
+    
+    .shader-editor {
+        font-size: 12px;
+        padding: 10px;
+    }
+    
+    .control-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    button {
+        width: 100%;
+        margin-bottom: 0;
+    }
+}
+

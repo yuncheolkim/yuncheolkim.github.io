@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL GLSL 学习</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- CodeMirror 样式 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/theme/monokai.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/addon/hint/show-hint.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>WebGL GLSL 测试</h1>
+        
+        <div class="main-content">
+            <!-- 左侧：代码编辑器区域 -->
+            <div class="left-panel">
+                <div class="shader-editor-container">
+                    <!-- 标签页导航 -->
+                    <div class="tab-nav">
+                        <button class="tab-btn active" data-tab="vertex">顶点着色器</button>
+                        <button class="tab-btn" data-tab="fragment">片段着色器</button>
+                    </div>
+                    
+                    <!-- 标签页内容 -->
+                    <div class="tab-content">
+                        <!-- 顶点着色器标签页 -->
+                        <div class="tab-pane active" id="vertex-tab">
+                            <div class="shader-panel">
+                                <div class="shader-header">
+                                    <h3>顶点着色器 (Vertex Shader)</h3>
+                                    <div class="header-actions">
+                                        <button class="btn-small" id="beautifyVertexBtn">美化</button>
+                                        <button class="btn-small" id="loadVertexBtn">重置</button>
+                                    </div>
+                                </div>
+                                <div class="editor-wrapper">
+                                    <textarea id="vertexShaderEditor" class="shader-editor"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 片段着色器标签页 -->
+                        <div class="tab-pane" id="fragment-tab">
+                            <div class="shader-panel">
+                                <div class="shader-header">
+                                    <h3>片段着色器 (Fragment Shader)</h3>
+                                    <div class="header-actions">
+                                        <button class="btn-small" id="beautifyFragmentBtn">美化</button>
+                                        <button class="btn-small" id="loadFragmentBtn">重置</button>
+                                    </div>
+                                </div>
+                                <div class="editor-wrapper">
+                                    <textarea id="fragmentShaderEditor" class="shader-editor"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <div class="control-row">
+                        <button id="applyBtn">应用着色器</button>
+                        <button id="resetBtn">重置</button>
+                        <label class="auto-apply-toggle">
+                            <input type="checkbox" id="autoApplyCheckbox" checked>
+                            <span>实时自动应用</span>
+                        </label>
+                    </div>
+                    <div class="info">
+                        <p>💡 修改 GLSL 代码后会自动应用到结果（如果启用了实时自动应用）</p>
+                        <p>按 Ctrl+Enter (Windows) 或 Cmd+Enter (Mac) 手动应用</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧：渲染结果区域 -->
+            <div class="right-panel">
+                <div class="canvas-container">
+                    <canvas id="glCanvas" width="800" height="600"></canvas>
+                    <div id="errorDisplay" class="error-display"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- CodeMirror 核心和 GLSL 模式 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/clike/clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/addon/hint/show-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/addon/hint/anyword-hint.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
+
