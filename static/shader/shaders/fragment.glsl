@@ -6,7 +6,7 @@ precision mediump float;
 
 // 从顶点着色器接收的数据
 varying vec3 v_color;
-varying vec2 uv;
+varying vec2 v_uv;
 
 // 外部传入的 Uniform 变量
 uniform float u_time;       // 运行时间（秒）
@@ -16,6 +16,7 @@ uniform vec2 u_resolution; // 画布分辨率
 void main() {
     // 示例 1: 使用时间改变颜色
     float red = abs(sin(u_time));
+    vec2 uv = v_uv;
     
     // 示例 2: 使用鼠标位置改变背景
     float dist = distance(uv, u_mouse);
