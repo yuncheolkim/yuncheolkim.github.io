@@ -36,7 +36,7 @@ logo = "https://kite.kitlib.cn/favicon.ico"
 [[links]]
 name = "HibitSoft"
 url = "https://www.hibitsoft.ir/"
-desc = "HibitSoft, 任务管理软件"
+desc = "HibitSoft, 卸载软件, 清理垃圾, 系统优化"
 tags = ["软件", "工具","效率","free","windows","系统工具"]
 logo = "https://www.hibitsoft.ir/favicon.ico"
 
