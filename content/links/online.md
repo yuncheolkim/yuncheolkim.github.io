@@ -130,5 +130,12 @@ logo = "https://www.qilvzm.com/favicon.png"
 desc = "shader 在线测试"
 tags = ["在线", "工具","shader"]
 
+[[links]]
+name = "Miro"
+url = "https://miro.com/app/dashboard/"
+logo = "https://miro.com/favicon.ico"
+desc = "Miro, 在线思维导图 白板"
+tags = ["在线", "工具","思维导图","画板"]
+
 +++
 
