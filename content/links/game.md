@@ -57,5 +57,27 @@ logo = "https://easyx.cn/favicon.ico"
 desc = "EasyX 是一个基于 C++ 的图形库，用于快速开发 Windows 下的图形应用程序。它提供了丰富的图形绘制功能，包括直线、矩形、圆形、多边形等基本图形，以及文字、图像、颜色等高级功能。"
 tags = ["游戏","图形库","c++","工具"]
 
+[[links]]
+name = "yorg"
+url = "https://yorg.io/"
+logo = "https://yorg.io/favicon.ico"
+desc = "在线塔防游戏"
+tags = ["游戏","页游","摸鱼"]
+
+[[links]]
+name = "小霸王"
+url = "https://www.yikm.net/"
+logo = "https://www.yikm.net/favicon.ico"
+desc = "小霸王, 在线游戏, 摸鱼"
+tags = ["游戏","页游","摸鱼"]
+
+
+[[links]]
+name = "Windows93"
+url = "https://www.windows93.net/"
+logo = "https://www.windows93.net/favicon.ico"
+desc = "Windows93, 在线游戏, 摸鱼"
+tags = ["游戏","页游","摸鱼"]
+
 +++
 
