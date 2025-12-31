@@ -79,5 +79,12 @@ logo = "https://www.windows93.net/favicon.ico"
 desc = "Windows93, 在线游戏, 摸鱼"
 tags = ["游戏","页游","摸鱼"]
 
+[[links]]
+name = "红色警戒2"
+url = "https://www.ra2web.com/"
+logo = "https://www.ra2web.com/favicon.ico"
+desc = "红色警戒2, 在线游戏, 摸鱼"
+tags = ["游戏","页游","摸鱼"]
+
 +++
 
