@@ -40,4 +40,11 @@ desc = "HibitSoft, 卸载软件, 清理垃圾, 系统优化"
 tags = ["软件", "工具","效率","free","windows","系统工具"]
 logo = "https://www.hibitsoft.ir/favicon.ico"
 
+[[links]]
+name = "图拉丁吧工具箱"
+url = "https://www.tbtool.cn/"
+desc = "图拉丁吧工具箱, 系统工具, 清理垃圾, 系统优化"
+tags = ["软件", "工具","效率","free","windows","系统工具"]
+logo = "https://www.tbtool.cn/favicon.ico"
+
 ++++++
