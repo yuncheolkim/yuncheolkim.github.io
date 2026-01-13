@@ -75,5 +75,11 @@ desc = "litemonitor, 监控系统"
 tags = ["软件", "工具","free","系统工具"]
 logo = "https://litemonitor.cn/favicon.ico"
 
+[[links]]
+name = "Enigma Protector"
+url = "https://enigmaprotector.com/en/downloads.html"
+desc = "Enigma Protector, 加密软件"
+tags = ["软件", "工具","打包exe","free","系统工具"]
+logo = "https://enigmaprotector.com/favicon.ico"
 
 ++++++
