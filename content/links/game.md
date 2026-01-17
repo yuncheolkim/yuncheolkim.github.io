@@ -86,5 +86,12 @@ logo = "https://www.ra2web.com/favicon.ico"
 desc = "红色警戒2, 在线游戏, 摸鱼"
 tags = ["游戏","页游","摸鱼"]
 
-+++
+[[links]]
+name = "taptap"
+url = "https://www.taptap.cn//"
+logo = "https://www.taptap.cn//favicon.ico"
+desc = "手游平台"
+tags = ["游戏","手游"]
 
+
++++
