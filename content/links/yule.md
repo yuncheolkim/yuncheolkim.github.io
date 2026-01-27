@@ -64,10 +64,17 @@ tags = ["游戏"]
 
 
 [[links]]
-name = "音乐"
+name = "jango 音乐"
 url = "https://www.jango.com/"
 logo = "https://www.jango.com/favicon.ico"
 desc = "jango 音乐"
+tags = ["音乐"]
+
+[[links]]
+name = "2t58 音乐"
+url = "https://www.2t58.com/"
+logo = "https://www.2t58.com/favicon.ico"
+desc = "2t58 音乐"
 tags = ["音乐"]
 
 
