@@ -63,5 +63,12 @@ desc = "epic games"
 tags = ["游戏"]
 
 
-+++
+[[links]]
+name = "音乐"
+url = "https://www.jango.com/"
+logo = "https://www.jango.com/favicon.ico"
+desc = "jango 音乐"
+tags = ["音乐"]
 
+
++++
