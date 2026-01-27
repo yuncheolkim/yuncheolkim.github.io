@@ -137,5 +137,15 @@ logo = "https://miro.com/favicon.ico"
 desc = "Miro, 在线思维导图 白板"
 tags = ["在线", "工具","思维导图","画板"]
 
-+++
 
+[[links]]
+name = "摸鱼工具库"
+url = "https://moyugongju.com/"
+logo = "https://moyugongju/favicon.ico"
+desc = "摸鱼工具库 导航"
+tags = ["导航"]
+
+
+
+
++++
