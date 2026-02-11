@@ -19,5 +19,12 @@ logo = "https://cn.tradingview.com/favicon.ico"
 desc = "TradingView"
 tags = ["股票"]
 
+[[links]]
+name = "Solidot"
+url = "https://www.solidot.org/"
+logo = "https://www.solidot.org/favicon.ico"
+desc = "Solidot, 科技资讯"
+tags = ["新闻","资讯","科技"]
+
 +++
 
