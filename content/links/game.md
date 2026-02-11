@@ -88,10 +88,17 @@ tags = ["游戏","页游","摸鱼"]
 
 [[links]]
 name = "taptap"
-url = "https://www.taptap.cn//"
+url = "https://www.taptap.cn/"
 logo = "https://www.taptap.cn//favicon.ico"
 desc = "手游平台"
 tags = ["游戏","手游"]
+
+[[links]]
+name = "极地游戏"
+url = "https://www.jidiyouxi.com/"
+logo = "https://www.jidiyouxi.com/favicon.ico"
+desc = "极地游戏,  学习班游戏下载"
+tags = ["游戏","页游","免费"]
 
 
 +++
