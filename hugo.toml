@@ -46,11 +46,6 @@ enableRobotsTXT = true
     ordered = false
 
 [[menu.main]]
-name = "Todo 下载"
-url = "/soft/todo-windows.zip"
-weight = 1
-
-[[menu.main]]
 name = "导航"
 url = "/links/"
 weight = 1
