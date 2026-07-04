@@ -4,7 +4,7 @@ date = 2025-12-15T10:00:00+08:00
 draft = false
 slug = "car-01"
 author = "yuncheol kim"
-categories = ["汽车"]
+categories = ["生活"]
 tags = ["汽车","交通事故"]
 summary = "不垫付、 不探望 、不调解，没有钱。"
 

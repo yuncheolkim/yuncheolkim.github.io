@@ -4,7 +4,7 @@ date = 2025-12-19T10:00:00+08:00
 draft = false
 slug = "car-01"
 author = "yuncheol kim"
-categories = ["工作"]
+categories = ["生活"]
 tags = ["工作","竞业协议"]
 summary = "竞业协议"
 
