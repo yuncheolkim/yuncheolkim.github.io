@@ -44,6 +44,10 @@ enableRobotsTXT = true
     startLevel = 2
     endLevel = 4
     ordered = false
+[[menu.main]]
+name = "中转站"
+url = "https://teamorouter.com/?i=4351c82027"
+weight = 1
 
 [[menu.main]]
 name = "导航"
